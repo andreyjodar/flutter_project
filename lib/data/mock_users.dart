@@ -2,14 +2,16 @@ List<Map<String, dynamic>> _fakeUsers = [
   {
     'email': 'joao@email.com',
     'name': 'João',
-    'password': '123456',
-    'type': 'Comprador'
+    'password': 'senha123',
+    'type': 'Comprador',
+    'date': DateTime.now()
   },
   {
     'email': 'ana@email.com',
     'name': 'Ana',
     'password': 'senha123',
-    'type': 'Vendedor'
+    'type': 'Produtor',
+    'date': DateTime.now()
   }
 ];
 
@@ -24,13 +26,14 @@ void addUser(String email, String password, String name, String type) {
     'email': email,
     'name': name,
     'password': password,
-    'type': type
+    'type': type,
+    'date': DateTime.now()
   });
 }
 
 Map<String, dynamic>? getUserByEmail(String email) {
   try {
-    return _fakeUsers.firstWhere((user) => user[email] == email);
+    return _fakeUsers.firstWhere((user) => user['email'] == email);
   } catch (e) {
     return null;
   }

@@ -4,7 +4,8 @@ import 'package:flutter_project/pages/product/widget_buy_product.dart';
 import 'package:flutter_project/pages/product/widget_product.dart';
 import 'package:flutter_project/pages/purchase/widget_purchase.dart';
 import 'package:flutter_project/pages/purchase/widget_purchase_log.dart';
-import 'package:flutter_project/pages/shopping/widget_seller.dart';
+import 'package:flutter_project/pages/shopping/widget_company.dart';
+import 'package:flutter_project/pages/shopping/widget_new_company.dart';
 import 'package:flutter_project/settings/routes.dart';
 import 'package:flutter_project/pages/auth/widget_login.dart';
 import 'package:flutter_project/pages/home/widget_home.dart';
@@ -26,7 +27,8 @@ class App extends StatelessWidget {
           Routes.register: (context) => WidgetRegister(),
           Routes.profile: (context) => WidgetProfile(),
           Routes.shopping: (context) => WidgetShopping(),
-          Routes.seller: (context) => WidgetSeller(),
+          Routes.company: (context) => WidgetCompany(),
+          Routes.newCompany: (context) => WidgetNewCompany(),
           Routes.product: (context) => WidgetProduct(),
           Routes.newProduct: (context) => WidgetNewProduct(),
           Routes.buyProduct: (context) => WidgetBuyProduct(),

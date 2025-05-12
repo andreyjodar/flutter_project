@@ -11,16 +11,16 @@ class BottomNavBar extends StatelessWidget {
 
     switch (index) {
       case 0:
-        Navigator.pushNamed(context, Routes.home);
+        Navigator.pushReplacementNamed(context, Routes.home);
         break;
       case 1:
-        Navigator.pushNamed(context, Routes.search);
+        Navigator.pushReplacementNamed(context, Routes.shopping);
         break;
       case 2:
-        Navigator.pushNamed(context, Routes.stock);
+        Navigator.pushReplacementNamed(context, Routes.purchaseLog);
         break;
       case 3:
-        Navigator.pushNamed(context, Routes.profile);
+        Navigator.pushReplacementNamed(context, Routes.profile);
         break;
       default:
     }

@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_project/util/email.dart';
+import 'package:flutter_project/util/password.dart';
+import '../../data/mock_users.dart';
 
 class LoginForm extends StatefulWidget {
   @override
@@ -10,37 +13,12 @@ class _LoginFormState extends State<LoginForm> {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
 
-  final Map<String, String> _registeredUsers = {
-    'usuario@email.com': 'senha123',
-    'joao@teste.com': '123456',
-  };
-
-  String? _validateEmail(String? value) {
-    if (value == null || value.isEmpty) {
-      return 'Informe seu email';
-    }
-    final emailRegex = RegExp(r'^[\w\.-]+@[\w\.-]+\.\w+$');
-    if(!emailRegex.hasMatch(value)) {
-      return 'Email inválido';
-    }
-    return null;
-  }
-
-  String? _validatePassword(String? value) {
-    if (value == null || value.isEmpty) {
-      return 'Informe a senha';
-    }
-    if (value.length < 6) {
-      return 'A senha deve ter no mínimo 6 caracteres';
-    }
-    return null;
-  }
-
   String? _validateUser(String email, String password) {
-    if(!_registeredUsers.containsKey(email)) {
+    var user = getUserByEmail(email);
+    if(user == null) {
       return 'Usuário não registrado';
     }
-    if(_registeredUsers[email] != password) {
+    if(user['password'] != password) {
       return 'Senha inválida';
     }
     return null;
@@ -55,6 +33,7 @@ class _LoginFormState extends State<LoginForm> {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text('Login realizado com sucesso!')),
         );
+        Navigator.pop(context);
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text(error)),
@@ -71,15 +50,15 @@ class _LoginFormState extends State<LoginForm> {
         children: [
           TextFormField(
             controller: _emailController,
-            decoration: const InputDecoration(hintText: 'Email'),
-            validator: _validateEmail
+            decoration: const InputDecoration(hintText: 'Email', border: OutlineInputBorder()),
+            validator: Email.validate
           ),
           const SizedBox(height: 16),
           TextFormField(
             controller: _passwordController,
-            decoration: const InputDecoration(hintText: 'Senha'),
+            decoration: const InputDecoration(hintText: 'Senha', border: OutlineInputBorder()),
             obscureText: true,
-            validator: _validatePassword
+            validator: Password.validate
           ),
           const SizedBox(height: 24),
           ElevatedButton(
@@ -89,12 +68,5 @@ class _LoginFormState extends State<LoginForm> {
         ],
       )
     );
-  }
-
-  @override
-  void dispose() {
-    _emailController.dispose();
-    _passwordController.dispose();
-    super.dispose();
   }
 }

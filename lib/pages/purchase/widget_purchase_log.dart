@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_project/components/bottom_menu.dart';
+import 'package:flutter_project/components/elements/appbar.dart';
+import 'package:flutter_project/components/elements/bottom_menu.dart';
 
 class WidgetPurchaseLog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      bottomNavigationBar: BottomNavBar(currentIndex: 2)
+      appBar: const CustomAppBar(title: 'Frutify'),
+      bottomNavigationBar: const BottomNavBar(currentIndex: 2)
     );
   }
 }

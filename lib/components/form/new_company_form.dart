@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_project/components/elements/submit_button.dart';
 import 'package:flutter_project/data/mock_companies.dart';
 import 'package:flutter_project/data/mock_users.dart';
 import 'package:flutter_project/util/address.dart';
@@ -89,9 +90,9 @@ class _NewCompanyFormState extends State<NewCompanyForm> {
             validator: Address.validate
           ),
           const SizedBox(height: 24),
-          ElevatedButton(
+          SubmitButton(
             onPressed: _submitCompany, 
-            child: const Text('Registrar')
+            text: 'Cadastrar'
           )
         ],
       ),

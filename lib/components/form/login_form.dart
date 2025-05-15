@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_project/components/elements/submit_button.dart';
+import 'package:flutter_project/settings/routes.dart';
 import 'package:flutter_project/util/email.dart';
 import 'package:flutter_project/util/password.dart';
 import '../../data/mock_users.dart';
@@ -33,7 +35,7 @@ class _LoginFormState extends State<LoginForm> {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text('Login realizado com sucesso!')),
         );
-        Navigator.pop(context);
+        Navigator.pushReplacementNamed(context, Routes.profile);
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text(error)),
@@ -61,9 +63,9 @@ class _LoginFormState extends State<LoginForm> {
             validator: Password.validate
           ),
           const SizedBox(height: 24),
-          ElevatedButton(
-            onPressed: _submitLogin,
-            child: const Text('Entrar')
+          SubmitButton(
+            onPressed: _submitLogin, 
+            text: 'Entrar'
           )
         ],
       )

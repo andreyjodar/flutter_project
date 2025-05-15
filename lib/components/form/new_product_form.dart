@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_project/components/elements/submit_button.dart';
 import 'package:flutter_project/data/mock_companies.dart';
 import 'package:flutter_project/data/mock_product.dart';
 import 'package:flutter_project/util/decimal.dart';
@@ -128,9 +129,9 @@ class _NewProductFormState extends State<NewProductForm> {
             }
           ),
           const SizedBox(height: 24),
-          ElevatedButton(
+          SubmitButton(
             onPressed: _submitProduct, 
-            child: const Text('Registrar')
+            text: 'Registrar'
           )
         ],
       ),

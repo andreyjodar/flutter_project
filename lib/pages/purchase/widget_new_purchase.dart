@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_project/components/elements/appbar.dart';
-import 'package:flutter_project/components/form/new_product_form.dart';
+import 'package:flutter_project/components/form/new_purchase_form.dart';
 
-class WidgetNewProduct extends StatelessWidget {
+class WidgetNewPurchase extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: const CustomAppBar(title: 'Novo Produto'),
+      appBar: const CustomAppBar(title: 'Nova Compra'),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Center(
@@ -14,9 +14,9 @@ class WidgetNewProduct extends StatelessWidget {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                const Icon(Icons.sell_rounded, size: 100, color: Colors.green),
+                const Icon(Icons.shopping_basket_rounded, size: 100, color: Colors.green),
                 const SizedBox(height: 24),
-                NewProductForm(),
+                NewPurchaseForm(),
               ],
             ),
           ),

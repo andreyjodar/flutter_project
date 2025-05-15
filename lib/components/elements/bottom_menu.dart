@@ -41,7 +41,7 @@ class BottomNavBar extends StatelessWidget {
           icon: Icon(Icons.store), 
           label: 'Lojas'),
         BottomNavigationBarItem(
-          icon: Icon(Icons.local_grocery_store), 
+          icon: Icon(Icons.receipt_long), 
           label: 'Compras'),
         BottomNavigationBarItem(
           icon: Icon(Icons.person), 

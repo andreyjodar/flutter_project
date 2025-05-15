@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_project/components/elements/appbar.dart';
 import 'package:flutter_project/components/form/login_form.dart';
 
 class WidgetLogin extends StatelessWidget {
@@ -7,6 +8,7 @@ class WidgetLogin extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: const CustomAppBar(title: 'Login'),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Center(
@@ -14,7 +16,7 @@ class WidgetLogin extends StatelessWidget {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                const Icon(Icons.lock_outline, size: 100, color: Colors.green),
+                const Icon(Icons.lock, size: 100, color: Colors.green),
                 const SizedBox(height: 24),
                 LoginForm(),
               ],

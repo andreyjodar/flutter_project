@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_project/components/elements/appbar.dart';
 import 'package:flutter_project/components/form/new_company_form.dart';
 
 class WidgetNewCompany extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-        return Scaffold(
-      // appBar: ,
+    return Scaffold(
+      appBar: const CustomAppBar(title: 'Nova Loja'),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Center(
@@ -13,10 +14,8 @@ class WidgetNewCompany extends StatelessWidget {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                // Você pode colocar uma logo aqui, por exemplo:
-                const Icon(Icons.lock_outline, size: 100, color: Colors.green),
+                const Icon(Icons.store, size: 100, color: Colors.green),
                 const SizedBox(height: 24),
-                // Aqui entra seu widget personalizado de formulário:
                 NewCompanyForm(),
               ],
             ),

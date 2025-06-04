@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_project/components/elements/submit_button.dart';
-import 'package:flutter_project/settings/routes.dart';
+import 'package:flutter_project/data/repository/user_repository.dart';
 import 'package:flutter_project/util/email.dart';
 import 'package:flutter_project/util/password.dart';
-import '../../data/mock_users.dart';
 
 class LoginForm extends StatefulWidget {
+  final UserRepository userRepository;
+  const LoginForm({super.key, required this.userRepository});
+
   @override
   State<LoginForm> createState() => _LoginFormState();
 }
@@ -17,30 +19,21 @@ class _LoginFormState extends State<LoginForm> {
   final _passwordController = TextEditingController();
   final _passwordValidator = PasswordValidator();
 
-  String? _validateUser(String email, String password) {
-    var user = getUserByEmail(email);
-    if(user == null) {
-      return 'Usuário não registrado';
-    }
-    if(user['password'] != password) {
-      return 'Senha inválida';
-    }
-    return null;
-  }
-
   void _submitLogin() {
     if (_formKey.currentState!.validate()) {
       final email = _emailController.text;
       final password = _passwordController.text;
-      final error = _validateUser(email, password);
-      if(error == null) {
+      final isValid = widget.userRepository.isValidUser(email, password);
+      if(isValid == true) {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text('Login realizado com sucesso!')),
         );
-        Navigator.pushReplacementNamed(context, Routes.mainPage);
+        Navigator.pop(context);
       } else {
+        final exists = widget.userRepository.getUserByEmail(email) != null;
+        final message = exists ? 'Senha inválida' : 'Usuário não registrado';
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(error)),
+          SnackBar(content: Text(message)),
         );
       }
     }

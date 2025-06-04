@@ -1,5 +1,7 @@
-class Integer {
-  static String? validate(String? value) {
+class IntegerValidator {
+  const IntegerValidator();
+
+  String? validate(String? value) {
     if(value == null || value.isEmpty) {
       return 'Valor nulo ou vazio';
     }

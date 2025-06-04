@@ -6,7 +6,7 @@ class WidgetNewPurchase extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: const CustomAppBar(title: 'Nova Compra'),
+      appBar: const CustomAppBar(title: 'Nova Compra', showAuthActions: false),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Center(

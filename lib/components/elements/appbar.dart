@@ -3,10 +3,12 @@ import 'package:flutter_project/settings/routes.dart';
 
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   final String title;
+  final bool showAuthActions;
 
   const CustomAppBar({
     super.key,
     required this.title,
+    required this.showAuthActions
   });
 
   @override
@@ -14,7 +16,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
     return AppBar(
       title: Text(title, style: const TextStyle(color: Colors.white, fontSize: 30)),
       backgroundColor: Colors.green,
-      actions: [
+      actions: showAuthActions ? [
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 8.0),
           child: Row(
@@ -35,7 +37,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
             ]
           )
         ), 
-      ],
+      ] : null,
     );
   }
 

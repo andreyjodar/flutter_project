@@ -6,7 +6,7 @@ class WidgetNewCompany extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: const CustomAppBar(title: 'Nova Loja'),
+      appBar: const CustomAppBar(title: 'Nova Loja', showAuthActions: false),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Center(

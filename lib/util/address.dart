@@ -1,5 +1,7 @@
-class Address {
-  static String? validate(String? address) {
+class AddressValidator {
+  const AddressValidator();
+  
+  String? validate(String? address) {
     if(address == null || address.isEmpty) {
       return 'Endereço nulo ou vazio';
     }

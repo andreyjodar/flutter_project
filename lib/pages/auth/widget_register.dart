@@ -6,7 +6,7 @@ class WidgetRegister extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: const CustomAppBar(title: 'Cadastro'),
+      appBar: const CustomAppBar(title: 'Cadastro', showAuthActions: false),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Center(

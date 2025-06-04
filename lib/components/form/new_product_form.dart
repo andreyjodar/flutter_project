@@ -14,6 +14,7 @@ class _NewProductFormState extends State<NewProductForm> {
   final _nameController = TextEditingController();
   final _companyController = TextEditingController();
   final _priceController = TextEditingController();
+  final _priceValidator = DecimalValidator();
   String? _productType;
   String? _productUn;
 
@@ -115,7 +116,7 @@ class _NewProductFormState extends State<NewProductForm> {
             controller: _priceController,
             keyboardType: const TextInputType.numberWithOptions(decimal: true),
             decoration: const InputDecoration(hintText: 'Preço', border: OutlineInputBorder()),
-            validator: Decimal.validate,
+            validator: _priceValidator.validate,
           ),
           const SizedBox(height: 16),
           TextFormField(

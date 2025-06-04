@@ -8,7 +8,7 @@ class WidgetLogin extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: const CustomAppBar(title: 'Login'),
+      appBar: const CustomAppBar(title: 'Login', showAuthActions: false),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Center(

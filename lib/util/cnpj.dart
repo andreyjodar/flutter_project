@@ -1,5 +1,7 @@
-class Cnpj {
-  static String? validate(String? cnpj) {
+class CnpjValidator {
+  const CnpjValidator();
+
+  String? validate(String? cnpj) {
     if(cnpj == null || cnpj.isEmpty) {
       return 'CNPJ nulo ou vazio';
     }

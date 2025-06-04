@@ -1,5 +1,7 @@
-class Decimal {
-  static String? validate(String? value) {
+class DecimalValidator {
+  const DecimalValidator();
+  
+  String? validate(String? value) {
     if(value == null || value.isEmpty) {
       return 'Valor nulo ou vazio';
     }

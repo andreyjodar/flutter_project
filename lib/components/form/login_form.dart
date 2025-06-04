@@ -13,7 +13,9 @@ class LoginForm extends StatefulWidget {
 class _LoginFormState extends State<LoginForm> {
   final _formKey = GlobalKey<FormState>();
   final _emailController = TextEditingController();
+  final _emailValidator = EmailValidator();
   final _passwordController = TextEditingController();
+  final _passwordValidator = PasswordValidator();
 
   String? _validateUser(String email, String password) {
     var user = getUserByEmail(email);
@@ -35,7 +37,7 @@ class _LoginFormState extends State<LoginForm> {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text('Login realizado com sucesso!')),
         );
-        Navigator.pushReplacementNamed(context, Routes.profile);
+        Navigator.pushReplacementNamed(context, Routes.mainPage);
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text(error)),
@@ -53,14 +55,14 @@ class _LoginFormState extends State<LoginForm> {
           TextFormField(
             controller: _emailController,
             decoration: const InputDecoration(hintText: 'Email', border: OutlineInputBorder()),
-            validator: Email.validate
+            validator: _emailValidator.validate
           ),
           const SizedBox(height: 16),
           TextFormField(
             controller: _passwordController,
             decoration: const InputDecoration(hintText: 'Senha', border: OutlineInputBorder()),
             obscureText: true,
-            validator: Password.validate
+            validator: _passwordValidator.validate
           ),
           const SizedBox(height: 24),
           SubmitButton(

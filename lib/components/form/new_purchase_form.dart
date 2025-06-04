@@ -18,8 +18,11 @@ class _NewPurchaseFormState extends State<NewPurchaseForm> {
   final _controllerProduct = TextEditingController();
   final _controllerCompany = TextEditingController();
   final _controllerEmail = TextEditingController();
+  final _emailValidator = EmailValidator();
   final _controllerAddress = TextEditingController();
+  final _addressValidator = AddressValidator();
   final _controllerQuantity = TextEditingController();
+  final _quantityValidator = IntegerValidator();
 
   String? _validatePurchase(String product, String company, String email) {
     final mockProduct = getProductByNameAndCompany(product, company);
@@ -84,19 +87,19 @@ class _NewPurchaseFormState extends State<NewPurchaseForm> {
           TextFormField(
             controller: _controllerEmail,
             decoration: const InputDecoration(hintText: 'Email do Comprador', border: OutlineInputBorder()),
-            validator: Email.validate
+            validator: _emailValidator.validate
           ),
           const SizedBox(height: 16),
           TextFormField(
             controller: _controllerAddress,
             decoration: const InputDecoration(hintText: 'Endereço de Entrega', border: OutlineInputBorder()),
-            validator: Address.validate
+            validator: _addressValidator.validate
           ),
           const SizedBox(height: 16),
           TextFormField(
             controller: _controllerQuantity,
             decoration: const InputDecoration(hintText: 'Quantidade', border: OutlineInputBorder()),
-            validator: Integer.validate
+            validator: _quantityValidator.validate
           ),
           const SizedBox(height: 24),
           SubmitButton(

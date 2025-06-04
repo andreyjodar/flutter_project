@@ -15,8 +15,11 @@ class _NewCompanyFormState extends State<NewCompanyForm> {
   final _formKey = GlobalKey<FormState>();
   final _nameController = TextEditingController();
   final _emailController = TextEditingController();
+  final _emailValidator = EmailValidator();
   final _cnpjController = TextEditingController();
+  final _cnpjValidator = CnpjValidator();
   final _addressController = TextEditingController();
+  final _addressValidator = AddressValidator();
 
   String? _validateCompany(String name, String email, String cnpj) {
     var mockCompanyName = getCompanyByName(name);
@@ -75,19 +78,19 @@ class _NewCompanyFormState extends State<NewCompanyForm> {
           TextFormField(
             controller: _emailController,
             decoration: const InputDecoration(hintText: 'Email', border: OutlineInputBorder()),
-            validator: Email.validate            
+            validator: _emailValidator.validate            
           ),
           const SizedBox(height: 16),
           TextFormField(
             controller: _cnpjController,
             decoration: const InputDecoration(hintText: 'CNPJ', border: OutlineInputBorder()),
-            validator: Cnpj.validate            
+            validator: _cnpjValidator.validate            
           ),
           const SizedBox(height: 16),
           TextFormField(
             controller: _addressController,
             decoration: const InputDecoration(hintText: 'Endereço', border: OutlineInputBorder()),
-            validator: Address.validate
+            validator: _addressValidator.validate
           ),
           const SizedBox(height: 24),
           SubmitButton(

@@ -1,5 +1,7 @@
-class Password {
-    static String? validate(String? value) {
+class PasswordValidator {
+  const PasswordValidator();
+
+  String? validate(String? value) {
     if (value == null || value.isEmpty) {
       return 'Senha nula ou vazia';
     }

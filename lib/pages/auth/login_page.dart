@@ -1,12 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_project/components/elements/appbar.dart';
-import 'package:flutter_project/components/form/register_form.dart';
+import 'package:flutter_project/components/form/login_form.dart';
+import 'package:flutter_project/data/repository/user_repository.dart';
 
-class WidgetRegister extends StatelessWidget {
+class LoginPage extends StatelessWidget {
+  final UserRepository userRepository;
+
+  const LoginPage({super.key, required this.userRepository});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: const CustomAppBar(title: 'Cadastro', showAuthActions: false),
+      appBar: const CustomAppBar(title: 'Login', showAuthActions: false),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Center(
@@ -16,7 +21,7 @@ class WidgetRegister extends StatelessWidget {
               children: [
                 const Icon(Icons.lock, size: 100, color: Colors.green),
                 const SizedBox(height: 24),
-                RegisterForm(),
+                LoginForm(userRepository: userRepository),
               ],
             ),
           ),

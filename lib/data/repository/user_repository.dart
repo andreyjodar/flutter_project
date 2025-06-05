@@ -18,6 +18,14 @@ class UserRepository {
 
   List<User> listUsers() => List.unmodifiable(_users);
 
+  User? getUserById(String id) {
+    try {
+      return _users.firstWhere((user) => user.id == id);
+    } catch (e) {
+      return null;
+    }
+  }
+
   User? getUserByEmail(String email) {
     try {
       return _users.firstWhere((user) => user.email == email);
@@ -27,14 +35,20 @@ class UserRepository {
   }
 
   void addUser(User user) {
-    if(getUserByEmail(user.email) == null) {
+    if(getUserByEmail(user.email) == null && getUserById(user.id) == null) {
       _users.add(user);
     }
   }
 
-  void updateUser(String email, User updatedUser) {
-    final index = _users.indexWhere((user) => user.email == email);
-    _users[index] = updatedUser;
+  void updateUser(User updatedUser) {
+    final index = _users.indexWhere((user) => user.id == updatedUser.id);
+    if(index != -1) {
+      _users[index] = updatedUser;
+    }
+  }
+
+  void removeUser(String id) {
+    _users.removeWhere((user) => user.id == id);
   }
 
   bool isValidUser(String email, String password) {

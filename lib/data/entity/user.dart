@@ -1,4 +1,7 @@
+import 'package:uuid/uuid.dart';
+
 class User {
+  String id;
   String name;
   String email;
   String password;
@@ -6,10 +9,12 @@ class User {
   DateTime registerDate;
 
   User({
+    String? id,
     required this.name,
     required this.email,
     required this.password,
     required this.type,
     DateTime? registerDate,
-  }) : registerDate = registerDate ?? DateTime.now();
+  }) : id = id ?? const Uuid().v4(), 
+       registerDate = registerDate ?? DateTime.now();
 }

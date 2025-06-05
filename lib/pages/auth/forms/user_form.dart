@@ -1,16 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_project/components/elements/submit_button.dart';
+import 'package:flutter_project/data/entity/user.dart';
+import 'package:flutter_project/data/repository/user_repository.dart';
 import 'package:flutter_project/settings/routes.dart';
 import 'package:flutter_project/util/email.dart';
 import 'package:flutter_project/util/password.dart';
-import '../../data/mock_users.dart';
 
-class RegisterForm extends StatefulWidget{
+class UserForm extends StatefulWidget {
+  final UserRepository userRepository;
+  final User? user;
+  const UserForm({super.key, required this.userRepository, this.user});
+
   @override
-  State<RegisterForm> createState() => _RegisterFormState();
+  State<UserForm> createState() => _UserFormState();
 }
 
-class _RegisterFormState extends State<RegisterForm> {
+class _UserFormState extends State<UserForm> {
   final _formKey = GlobalKey<FormState>();
   final _emailController = TextEditingController();
   final _emailValidator = EmailValidator();
@@ -19,38 +24,73 @@ class _RegisterFormState extends State<RegisterForm> {
   final _passwordValidator = PasswordValidator();
   String? _userType;
 
-  String? _validateRegister(String email) {
-    var user = getUserByEmail(email);
-    if(user != null) {
-      return 'Existe um usuário com esse email';
-    }
-    else {
-      return null;
+  @override
+  void initState() {
+    super.initState();
+    if (widget.user != null) {
+      _nameController.text = widget.user!.name;
+      _emailController.text = widget.user!.email;
+      _passwordController.text = widget.user!.password;
+      _userType = widget.user!.type;
     }
   }
 
-  void _submitRegister() {
-    if(_formKey.currentState!.validate()) {
+  String? _validateDuplicateEmail(String email) {
+    final existingUser = widget.userRepository.getUserByEmail(email);
+    if (existingUser != null && existingUser.id != widget.user?.id) {
+      return 'Já existe um usuário com esse e-mail';
+    }
+    return null;
+  }
+
+  void _submitForm() {
+    if (_formKey.currentState!.validate()) {
       final email = _emailController.text;
-      final error = _validateRegister(email);
-      if(error == null) {
-        final name = _nameController.text;
-        final password = _passwordController.text;
-        addUser(email, password, name, _userType!);
+      final name = _nameController.text;
+      final password = _passwordController.text;
+      final type = _userType!;
+
+      final duplicateEmailError = _validateDuplicateEmail(email);
+      if (duplicateEmailError != null) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(duplicateEmailError)),
+        );
+        return;
+      }
+
+      if (widget.user == null) {
+        final newUser = User(
+          name: name,
+          email: email,
+          password: password,
+          type: type,
+        );
+        widget.userRepository.addUser(newUser);
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text('Usuário registrado com sucesso!')),
         );
-        Navigator.pushReplacementNamed(context, Routes.mainPage);
       } else {
+        final updatedUser = User(
+          id: widget.user!.id,
+          name: name,
+          email: email,
+          password: password,
+          type: type,
+        );
+        widget.userRepository.updateUser(updatedUser);
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(error)),
+          const SnackBar(content: Text('Usuário atualizado com sucesso!')),
         );
       }
+
+      Navigator.pushReplacementNamed(context, Routes.mainPage);
     }
   }
 
   @override
   Widget build(BuildContext context) {
+    final isEditing = widget.user != null;
+
     return Form(
       key: _formKey,
       child: Column(
@@ -100,8 +140,8 @@ class _RegisterFormState extends State<RegisterForm> {
           ),
           const SizedBox(height: 24),
           SubmitButton(
-            onPressed: _submitRegister, 
-            text: 'Registrar'
+            onPressed: _submitForm, 
+            text: isEditing ? 'Atualizar':'Registrar'
           )
         ],
       ),

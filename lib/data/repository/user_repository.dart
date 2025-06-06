@@ -1,19 +1,17 @@
-import 'package:flutter_project/data/entity/user.dart';
+import 'package:flutter_project1/data/entity/user.dart';
 
 class UserRepository {
   final List<User> _users = [
     User(
-      name: 'João',
-      email: 'joao@email.com',
-      password: 'senha123',
-      type: 'Comprador'
-    ),
+        name: 'João',
+        email: 'joao@email.com',
+        password: 'senha123',
+        type: 'Comprador'),
     User(
-      name: 'Ana',
-      email: 'ana@email.com',
-      password: 'senha123',
-      type: 'Produtor'
-    ),
+        name: 'Ana',
+        email: 'ana@email.com',
+        password: 'senha123',
+        type: 'Produtor'),
   ];
 
   List<User> listUsers() => List.unmodifiable(_users);
@@ -35,14 +33,14 @@ class UserRepository {
   }
 
   void addUser(User user) {
-    if(getUserByEmail(user.email) == null && getUserById(user.id) == null) {
+    if (getUserByEmail(user.email) == null && getUserById(user.id) == null) {
       _users.add(user);
     }
   }
 
   void updateUser(User updatedUser) {
     final index = _users.indexWhere((user) => user.id == updatedUser.id);
-    if(index != -1) {
+    if (index != -1) {
       _users[index] = updatedUser;
     }
   }

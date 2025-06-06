@@ -29,31 +29,23 @@ class _MainPageState extends State<MainPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CustomAppBar(title: 'Frutify', showAuthActions: true),
-      body: IndexedStack(
-        index: _selectedIndex,
-        children: _pages,
-      ),
-      bottomNavigationBar: BottomNavigationBar(
-        currentIndex: _selectedIndex,
-        onTap:  _onItemTapped,
-        unselectedItemColor: Colors.black45,
-        selectedItemColor: Colors.black87,
-        items: const [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home_filled),
-            label: 'Início'),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.store), 
-            label: 'Lojas'),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.receipt_long), 
-            label: 'Compras'),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.person), 
-            label: 'Perfil')
-        ]
-      )
-    );
+        appBar: CustomAppBar(title: 'Frutify', showAuthActions: true),
+        body: IndexedStack(
+          index: _selectedIndex,
+          children: _pages,
+        ),
+        bottomNavigationBar: BottomNavigationBar(
+            currentIndex: _selectedIndex,
+            onTap: _onItemTapped,
+            unselectedItemColor: Colors.black45,
+            selectedItemColor: Colors.black87,
+            items: const [
+              BottomNavigationBarItem(
+                  icon: Icon(Icons.home_filled), label: 'Início'),
+              BottomNavigationBarItem(icon: Icon(Icons.store), label: 'Lojas'),
+              BottomNavigationBarItem(
+                  icon: Icon(Icons.receipt_long), label: 'Compras'),
+              BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Perfil')
+            ]));
   }
 }

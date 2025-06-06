@@ -96,53 +96,54 @@ class _UserFormState extends State<UserForm> {
       child: Column(
         children: [
           TextFormField(
-            controller: _nameController,
-            decoration: const InputDecoration(hintText: 'Nome', border: OutlineInputBorder()),
-            validator: (value) {
-              if(value == null || value.isEmpty) {
-                return 'Preencha com um nome';
-              }
-              return null;
-            }
-          ),
+              controller: _nameController,
+              decoration: const InputDecoration(
+                  hintText: 'Nome', border: OutlineInputBorder()),
+              validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return 'Preencha com um nome';
+                }
+                return null;
+              }),
           const SizedBox(height: 16),
           TextFormField(
             controller: _emailController,
-            decoration: const InputDecoration(hintText: 'Email', border: OutlineInputBorder()),
+            decoration: const InputDecoration(
+                hintText: 'Email', border: OutlineInputBorder()),
             validator: _emailValidator.validate,
           ),
           const SizedBox(height: 16),
           TextFormField(
             controller: _passwordController,
-            decoration: const InputDecoration(hintText: 'Senha', border: OutlineInputBorder()),
+            decoration: const InputDecoration(
+                hintText: 'Senha', border: OutlineInputBorder()),
             obscureText: true,
             validator: _passwordValidator.validate,
           ),
           const SizedBox(height: 16),
           DropdownButtonFormField(
-            value: _userType,
-            decoration: const InputDecoration(hintText: 'Tipo de Usuário', border: OutlineInputBorder()),
-            items: const [
-              DropdownMenuItem(value: 'Comprador', child: Text('Comprador')),
-              DropdownMenuItem(value: 'Produtor', child: Text('Produtor'))
-            ],
-            onChanged: (value) => {
-              setState(() {
-                _userType = value;
-              }) 
-            },
-            validator: (value) {
-              if(value == null || value.isEmpty) {
-                return 'Selecione um Tipo';
-              }
-              return null;
-            }
-          ),
+              value: _userType,
+              decoration: const InputDecoration(
+                  hintText: 'Tipo de Usuário', border: OutlineInputBorder()),
+              items: const [
+                DropdownMenuItem(value: 'Comprador', child: Text('Comprador')),
+                DropdownMenuItem(value: 'Produtor', child: Text('Produtor'))
+              ],
+              onChanged: (value) => {
+                    setState(() {
+                      _userType = value;
+                    })
+                  },
+              validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return 'Selecione um Tipo';
+                }
+                return null;
+              }),
           const SizedBox(height: 24),
           SubmitButton(
-            onPressed: _submitForm, 
-            text: isEditing ? 'Atualizar':'Registrar'
-          )
+              onPressed: _submitForm,
+              text: isEditing ? 'Atualizar' : 'Registrar')
         ],
       ),
     );

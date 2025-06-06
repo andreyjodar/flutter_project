@@ -14,7 +14,8 @@ class WidgetNewPurchase extends StatelessWidget {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                const Icon(Icons.shopping_basket_rounded, size: 100, color: Colors.green),
+                const Icon(Icons.shopping_basket_rounded,
+                    size: 100, color: Colors.green),
                 const SizedBox(height: 24),
                 NewPurchaseForm(),
               ],

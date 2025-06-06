@@ -1,4 +1,4 @@
-import 'package:flutter_project/data/mock_product.dart';
+import 'package:flutter_project1/data/mock_product.dart';
 
 List<Map<String, dynamic>> _fakePurchase = [
   {
@@ -17,15 +17,15 @@ double _calculatePrice(String product, String company, int quantity) {
   return mockProduct!['price'] * quantity;
 }
 
-void addPurchase(String product, String company, String email, int quantity, String address) {
+void addPurchase(String product, String company, String email, int quantity,
+    String address) {
   _fakePurchase.add({
     'product': product,
     'company': company,
-    'email': email, 
+    'email': email,
     'quantity': quantity,
     'address': address,
     'total-price': _calculatePrice(product, company, quantity),
     'date': DateTime.now()
   });
 }
-

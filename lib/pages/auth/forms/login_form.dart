@@ -24,7 +24,7 @@ class _LoginFormState extends State<LoginForm> {
       final email = _emailController.text;
       final password = _passwordController.text;
       final isValid = widget.userRepository.isValidUser(email, password);
-      if(isValid == true) {
+      if (isValid == true) {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text('Login realizado com sucesso!')),
         );
@@ -42,28 +42,24 @@ class _LoginFormState extends State<LoginForm> {
   @override
   Widget build(BuildContext context) {
     return Form(
-      key: _formKey,
-      child: Column(
-        children: [
-          TextFormField(
-            controller: _emailController,
-            decoration: const InputDecoration(hintText: 'Email', border: OutlineInputBorder()),
-            validator: _emailValidator.validate
-          ),
-          const SizedBox(height: 16),
-          TextFormField(
-            controller: _passwordController,
-            decoration: const InputDecoration(hintText: 'Senha', border: OutlineInputBorder()),
-            obscureText: true,
-            validator: _passwordValidator.validate
-          ),
-          const SizedBox(height: 24),
-          SubmitButton(
-            onPressed: _submitLogin, 
-            text: 'Entrar'
-          )
-        ],
-      )
-    );
+        key: _formKey,
+        child: Column(
+          children: [
+            TextFormField(
+                controller: _emailController,
+                decoration: const InputDecoration(
+                    hintText: 'Email', border: OutlineInputBorder()),
+                validator: _emailValidator.validate),
+            const SizedBox(height: 16),
+            TextFormField(
+                controller: _passwordController,
+                decoration: const InputDecoration(
+                    hintText: 'Senha', border: OutlineInputBorder()),
+                obscureText: true,
+                validator: _passwordValidator.validate),
+            const SizedBox(height: 24),
+            SubmitButton(onPressed: _submitLogin, text: 'Entrar')
+          ],
+        ));
   }
 }

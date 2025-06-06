@@ -23,7 +23,8 @@ class App extends StatelessWidget {
         routes: {
           Routes.mainPage: (context) => MainPage(),
           Routes.login: (context) => LoginPage(userRepository: userRepository),
-          Routes.register: (context) => RegisterPage(userRepository: userRepository),
+          Routes.register: (context) =>
+              RegisterPage(userRepository: userRepository),
           Routes.company: (context) => WidgetCompany(),
           Routes.newCompany: (context) => WidgetNewCompany(),
           Routes.product: (context) => WidgetProduct(),

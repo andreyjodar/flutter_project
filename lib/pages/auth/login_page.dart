@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_project/components/elements/appbar.dart';
-import 'package:flutter_project/components/form/login_form.dart';
 import 'package:flutter_project/data/repository/user_repository.dart';
+import 'package:flutter_project/pages/auth/forms/login_form.dart';
 
 class LoginPage extends StatelessWidget {
   final UserRepository userRepository;

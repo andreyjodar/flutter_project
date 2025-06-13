@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_project/core/components/appbar.dart';
 import 'package:flutter_project/core/components/submit_button.dart';
-import 'package:flutter_project/data/dtos/user_dto.dart';
-import 'package:flutter_project/data/repositories_impl/user_repository.dart';
+import 'package:flutter_project/data/models/user_dto.dart';
+import 'package:flutter_project/data/repositories/user_repository.dart';
 import 'package:flutter_project/core/settings/routes.dart';
 import 'package:flutter_project/core/utils/validators/email_validator.dart';
 import 'package:flutter_project/core/utils/validators/password_validator.dart';
 
 class UserForm extends StatefulWidget {
   final UserRepository userRepository;
-  final User? user;
+  final UserDTO? user;
   const UserForm({super.key, required this.userRepository, this.user});
 
   @override
@@ -60,7 +60,7 @@ class _UserFormState extends State<UserForm> {
       }
 
       if (widget.user == null) {
-        final newUser = User(
+        final newUser = UserDTO(
           name: name,
           email: email,
           password: password,
@@ -71,7 +71,7 @@ class _UserFormState extends State<UserForm> {
           const SnackBar(content: Text('Usuário registrado com sucesso!')),
         );
       } else {
-        final updatedUser = User(
+        final updatedUser = UserDTO(
           id: widget.user!.id,
           name: name,
           email: email,

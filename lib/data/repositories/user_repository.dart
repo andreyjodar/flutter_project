@@ -1,22 +1,22 @@
-import 'package:flutter_project/data/dtos/user_dto.dart';
+import 'package:flutter_project/data/models/user_dto.dart';
 
 class UserRepository {
-  final List<User> _users = [
-    User(
+  final List<UserDTO> _users = [
+    UserDTO(
         name: 'João',
         email: 'joao@email.com',
         password: 'senha123',
         type: 'Comprador'),
-    User(
+    UserDTO(
         name: 'Ana',
         email: 'ana@email.com',
         password: 'senha123',
         type: 'Produtor'),
   ];
 
-  List<User> listUsers() => List.unmodifiable(_users);
+  List<UserDTO> listUsers() => List.unmodifiable(_users);
 
-  User? getUserById(String id) {
+  UserDTO? getUserById(String id) {
     try {
       return _users.firstWhere((user) => user.id == id);
     } catch (e) {
@@ -24,7 +24,7 @@ class UserRepository {
     }
   }
 
-  User? getUserByEmail(String email) {
+  UserDTO? getUserByEmail(String email) {
     try {
       return _users.firstWhere((user) => user.email == email);
     } catch (e) {
@@ -32,13 +32,13 @@ class UserRepository {
     }
   }
 
-  void addUser(User user) {
+  void addUser(UserDTO user) {
     if (getUserByEmail(user.email) == null && getUserById(user.id) == null) {
       _users.add(user);
     }
   }
 
-  void updateUser(User updatedUser) {
+  void updateUser(UserDTO updatedUser) {
     final index = _users.indexWhere((user) => user.id == updatedUser.id);
     if (index != -1) {
       _users[index] = updatedUser;

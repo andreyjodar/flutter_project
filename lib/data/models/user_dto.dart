@@ -1,15 +1,17 @@
 import 'package:uuid/uuid.dart';
 
-class User {
+class UserDTO {
   String id;
+  String? urlImage;
   String name;
   String email;
   String password;
   String type;
   DateTime registerDate;
 
-  User({
+  UserDTO({
     String? id,
+    this.urlImage,
     required this.name,
     required this.email,
     required this.password,

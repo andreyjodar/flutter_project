@@ -1,34 +1,33 @@
-import 'package:flutter_project/core/utils/validators/email_validator.dart';
-import 'package:flutter_project/core/utils/validators/password_validator.dart';
+import 'package:flutter_project/domain/valueobjects/Password.dart';
+import 'package:flutter_project/domain/valueobjects/email.dart';
+import 'package:uuid/uuid.dart';
+
+enum UserType {
+  produtor, 
+  comprador
+}
 
 class User {
   String id;
   String name;
-  String email;
-  String password;
-  String type;
+  Email email;
+  Password password;
+  UserType type;
   DateTime registerDate;
 
-  static const validTypes = ['Produtor', 'Comprador'];
-
   User({
-    required this.id,
+    String? id,
     required this.name, 
     required this.email, 
     required this.password, 
     required this.type,
-    required this.registerDate
-  }) {
-    _validate();
+    DateTime? registerDate
+  }) : id = id ?? Uuid().v4(), 
+       registerDate = registerDate ?? DateTime.now() 
+  {
+    if(name.trim().isEmpty) throw Exception('Nome do usuário não pode ser vazio');
   }
 
-  void _validate() {
-    if(name.trim().isEmpty) throw Exception('Nome não poder estar vazio');
-    if(!EmailValidator().isValid(email)) throw Exception('Email inválido');
-    if(!PasswordValidator().isValid(password)) throw Exception('Senha com menos de 8 caracteres');
-    if(!validTypes.contains(type)) throw Exception('Tipo deve ser "Produtor" ou "Comprador"');
-  }
-
-  bool isProducer() => type == "Produtor";
-  bool isBuyer() => type == "Comprador";
+  bool isProducer() => type == UserType.produtor;
+  bool isBuyer() => type == UserType.comprador;
 }

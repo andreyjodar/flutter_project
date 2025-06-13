@@ -6,7 +6,7 @@ class PurchasePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Center(
-      child: Text('Purchase Page'),
+      child: Text('Purchase Log Page'),
     );
   }
 }

@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_project/core/components/appbar.dart';
 import 'package:flutter_project/core/components/submit_button.dart';
-import 'package:flutter_project/data/repositories_impl/user_repository.dart';
-import 'package:flutter_project/core/utils/email_validator.dart';
-import 'package:flutter_project/core/utils/password_validator.dart';
+import 'package:flutter_project/data/repositories/user_repository.dart';
+import 'package:flutter_project/core/utils/validators/email_validator.dart';
+import 'package:flutter_project/core/utils/validators/password_validator.dart';
 
 class LoginForm extends StatefulWidget {
   final UserRepository userRepository;

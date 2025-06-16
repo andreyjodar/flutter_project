@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_project/core/components/appbar.dart';
 import 'package:flutter_project/core/components/submit_button.dart';
+import 'package:flutter_project/core/utils/validators/address_validator.dart';
 import 'package:flutter_project/data/models/user_dto.dart';
 import 'package:flutter_project/data/repositories/user_repository.dart';
 import 'package:flutter_project/core/settings/routes.dart';
@@ -23,6 +24,9 @@ class _UserFormState extends State<UserForm> {
   final _nameController = TextEditingController();
   final _passwordController = TextEditingController();
   final _passwordValidator = PasswordValidator();
+  final _addressController = TextEditingController();
+  final _addressValidator = AddressValidator();
+  final _urlImageController = TextEditingController();
   String? _userType;
 
   @override
@@ -49,6 +53,7 @@ class _UserFormState extends State<UserForm> {
       final email = _emailController.text;
       final name = _nameController.text;
       final password = _passwordController.text;
+      final address = _addressController.text;
       final type = _userType!;
 
       final duplicateEmailError = _validateDuplicateEmail(email);
@@ -65,6 +70,7 @@ class _UserFormState extends State<UserForm> {
           email: email,
           password: password,
           type: type,
+          address: address
         );
         widget.userRepository.addUser(newUser);
         ScaffoldMessenger.of(context).showSnackBar(
@@ -77,6 +83,7 @@ class _UserFormState extends State<UserForm> {
           email: email,
           password: password,
           type: type,
+          address: address
         );
         widget.userRepository.updateUser(updatedUser);
         ScaffoldMessenger.of(context).showSnackBar(
@@ -107,6 +114,13 @@ class _UserFormState extends State<UserForm> {
                   key: _formKey,
                   child: Column(
                     children: [
+                      TextFormField(
+                        controller: _urlImageController,
+                        decoration: const InputDecoration(
+                            hintText: 'Imagem (URL)', border: OutlineInputBorder()),
+                        validator: (value) {}
+                      ),
+                      const SizedBox(height: 16),
                       TextFormField(
                           controller: _nameController,
                           decoration: const InputDecoration(
@@ -152,6 +166,14 @@ class _UserFormState extends State<UserForm> {
                             }
                             return null;
                           }),
+                      const SizedBox(height: 16),
+                      TextFormField(
+                        controller: _addressController,
+                        decoration: const InputDecoration(
+                            hintText: 'Endereço', border: OutlineInputBorder()),
+                        obscureText: true,
+                        validator: _addressValidator.validate,
+                      ),
                       const SizedBox(height: 24),
                       SubmitButton(
                           onPressed: _submitForm,

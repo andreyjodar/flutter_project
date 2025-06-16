@@ -5,13 +5,13 @@ class CartItemDTO {
   String id;
   ProductDTO product;
   int quantity;
-  DateTime appendDate;
+  DateTime lastUpdate;
 
   CartItemDTO({
     String? id, 
     required this.product,
     required this.quantity,
-    DateTime? appendDate
+    DateTime? lastUpdate
   }) : id = id ?? Uuid().v4(),
-       appendDate = appendDate ?? DateTime.now();
+       lastUpdate = lastUpdate ?? DateTime.now();
 }

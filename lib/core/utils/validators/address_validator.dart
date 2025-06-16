@@ -5,7 +5,7 @@ class AddressValidator {
     if(address == null || address.isEmpty) {
       return 'Endereço nulo ou vazio';
     }
-    final addressRegex = RegExp(r'^[A-Za-zÀ-ÿ\s]+,\s?\d{1,5}$');
+    final addressRegex = RegExp(r'^.+,\s*\d+$');
     if(!addressRegex.hasMatch(address)) {
       return 'Formato inválido';
     }

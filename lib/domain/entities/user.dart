@@ -1,19 +1,18 @@
 import 'package:flutter_project/domain/valueobjects/Password.dart';
+import 'package:flutter_project/domain/valueobjects/address.dart';
 import 'package:flutter_project/domain/valueobjects/email.dart';
 import 'package:uuid/uuid.dart';
 
-enum UserType {
-  produtor, 
-  comprador
-}
+enum UserType { producer, buyer }
 
 class User {
-  String id;
+  final String id;
   String name;
-  Email email;
+  final Email email;
   Password password;
   UserType type;
-  DateTime registerDate;
+  Address address;
+  final DateTime registerDate;
 
   User({
     String? id,
@@ -21,6 +20,7 @@ class User {
     required this.email, 
     required this.password, 
     required this.type,
+    required this.address,
     DateTime? registerDate
   }) : id = id ?? Uuid().v4(), 
        registerDate = registerDate ?? DateTime.now() 
@@ -28,6 +28,24 @@ class User {
     if(name.trim().isEmpty) throw Exception('Nome do usuário não pode ser vazio');
   }
 
-  bool isProducer() => type == UserType.produtor;
-  bool isBuyer() => type == UserType.comprador;
+  void changePassword(Password password) {
+    this.password = password;
+  }
+
+  void changeType(UserType type) {
+    this.type = type;
+  }
+
+  void changeName(String name) {
+    if(name.trim().isEmpty) throw Exception('Nome de usuário não pode ser vazio');
+    this.name = name.trim();
+  }
+
+  void updateAddress(Address address) {
+    this.address = address;
+  }
+
+  bool isProducer() => type == UserType.producer;
+
+  bool isBuyer() => type == UserType.buyer;
 }

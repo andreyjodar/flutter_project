@@ -6,12 +6,14 @@ class UserRepository {
         name: 'João',
         email: 'joao@email.com',
         password: 'senha123',
-        type: 'Comprador'),
+        type: 'Comprador',
+        address: 'Avenida Fagundes, 213'),
     UserDTO(
         name: 'Ana',
         email: 'ana@email.com',
         password: 'senha123',
-        type: 'Produtor'),
+        type: 'Produtor',
+        address: 'Rua Benito, 241'),
   ];
 
   List<UserDTO> listUsers() => List.unmodifiable(_users);

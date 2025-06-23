@@ -1,40 +1,40 @@
 import 'package:flutter_project/domain/entities/cart_item.dart';
 import 'package:flutter_project/domain/entities/user.dart';
-import 'package:uuid/uuid.dart';
 
 class Cart {
   final String id;
-  final User buyer;
-  List<CartItem> cartItems;
-  DateTime lastUpdate;
+  final User? buyer;
+  final List<CartItem> _cartItems;
+  DateTime _lastUpdate;
 
   Cart({
-    String? id, 
-    required this.buyer,
-    required this.cartItems,
-    DateTime? lastUpdate
-  }) : id = id ?? Uuid().v4(),
-       lastUpdate = lastUpdate ?? DateTime.now();
+    required this.id,
+    List<CartItem>? items,
+    this.buyer,
+    DateTime? lastUpdate,
+  })  : _cartItems = List.from(items ?? []),
+        _lastUpdate = lastUpdate ?? DateTime.now();
+
+  List<CartItem> get cartItems => List.unmodifiable(_cartItems);
+  DateTime get lastUpdate => _lastUpdate;
 
   void addItem(CartItem item) {
-    cartItems.add(item);
+    _cartItems.add(item);
     _updateDate();
   }
 
-  void removeItem(String id) {
-    cartItems.removeWhere((item) => item.id == id);
+  void removeItem(String itemId) {
+    _cartItems.removeWhere((item) => item.id == itemId);
     _updateDate();
+  }
+
+  double get totalPrice => _calculateTotalPrice();
+
+  double _calculateTotalPrice() {
+    return _cartItems.fold(0, (sum, item) => sum + item.calculatePrice());
   }
 
   void _updateDate() {
-    lastUpdate = DateTime.now();
-  }
-
-  double calculatePrice() {
-    double result = 0;
-    for (CartItem item in cartItems) {
-      result += item.calculatePrice();
-    }
-    return result;
+    _lastUpdate = DateTime.now();
   }
 }

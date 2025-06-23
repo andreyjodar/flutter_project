@@ -1,34 +1,31 @@
 import 'package:flutter_project/domain/entities/product.dart';
-import 'package:uuid/uuid.dart';
 
 class CartItem {
   final String id;
   final Product product;
-  int quantity;
-  DateTime lastUpdate;
+  int _quantity;
+  DateTime _lastUpdate;
 
   CartItem({
-    String? id,
+    required this.id,
     required this.product,
-    required this.quantity,
-    DateTime? lastUpdate
-  }) : id = id ?? Uuid().v4(),
-       lastUpdate = lastUpdate ?? DateTime.now()
-  {
-    if(quantity <= 0) throw Exception('Quantidade inválida (menor ou igual a zero)');
+    required int quantity,
+    DateTime? lastUpdate,
+  })  : _quantity = quantity,
+        _lastUpdate = lastUpdate ?? DateTime.now() {
+    if (quantity <= 0) {
+      throw Exception('Quantidade inválida');
+    }
   }
+
+  int get quantity => _quantity;
+  DateTime get lastUpdate => _lastUpdate;
 
   void updateQuantity(int quantity) {
-    if(quantity <= 0) throw Exception('Quantidade inválida (menor ou igual a zero)');
-    this.quantity = quantity;
-    _updateDate();
+    if (quantity <= 0) throw Exception('Quantidade inválida');
+    _quantity = quantity;
+    _lastUpdate = DateTime.now();
   }
 
-  void _updateDate() {
-    lastUpdate = DateTime.now();
-  }
-
-  double calculatePrice() {
-    return product.price * quantity;
-  }
+  double calculatePrice() => product.price * _quantity;
 }

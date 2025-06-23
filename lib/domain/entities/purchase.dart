@@ -17,7 +17,7 @@ class Purchase {
     DateTime? purchaseDate
   }) : id = id ?? Uuid().v4(),
        purchaseDate = purchaseDate ?? DateTime.now(),
-       price = purchaseCart.calculatePrice();
+       price = purchaseCart.totalPrice;
 
   void updateStatus(PurchaseStatus status) {
     this.status = status;

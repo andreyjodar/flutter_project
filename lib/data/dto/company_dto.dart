@@ -1,4 +1,4 @@
-import 'package:flutter_project/data/models/user_dto.dart';
+import 'package:flutter_project/data/dto/user_dto.dart';
 import 'package:uuid/uuid.dart';
 
 class CompanyDTO {
@@ -7,7 +7,7 @@ class CompanyDTO {
   String name;
   String description;
   String cnpj;
-  UserDTO producer;
+  UserDto producer;
   String address;
   DateTime registerDate;
 

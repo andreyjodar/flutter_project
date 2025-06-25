@@ -16,4 +16,28 @@ class UserDto {
     this.address,
     required this.registerDate,
   });
+  
+  factory UserDto.fromMap(Map<String, dynamic> map) {
+    return UserDto(
+      id: map['id'],
+      name: map['name'],
+      email: map['email'],
+      password: map['password'],
+      type: map['type'],
+      address: map['address'],
+      registerDate: map['registerDate'],
+    );
+  }
+
+  Map<String, dynamic> toMap() {
+    return {
+      'id': id,
+      'name': name,
+      'email': email,
+      'password': password,
+      'type': type,
+      'address': address,
+      'registerDate': registerDate,
+    };
+  }
 }

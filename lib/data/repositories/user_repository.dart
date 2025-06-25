@@ -1,4 +1,4 @@
-import 'package:flutter_project/data/models/user_dto.dart';
+import 'package:flutter_project/data/dto/user_dto.dart';
 
 class UserRepository {
   final List<UserDTO> _users = [

@@ -1,17 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_project/core/components/appbar.dart';
 import 'package:flutter_project/core/components/submit_button.dart';
-import 'package:flutter_project/core/utils/validators/address_validator.dart';
-import 'package:flutter_project/data/models/user_dto.dart';
-import 'package:flutter_project/data/repositories/user_repository.dart';
 import 'package:flutter_project/core/settings/routes.dart';
-import 'package:flutter_project/core/utils/validators/email_validator.dart';
-import 'package:flutter_project/core/utils/validators/password_validator.dart';
+import 'package:flutter_project/presentation/validators/address_validator.dart';
+import 'package:flutter_project/presentation/validators/email_validator.dart';
+import 'package:flutter_project/presentation/validators/password_validator.dart';
+import 'package:flutter_project/domain/entities/user.dart';
+import 'package:flutter_project/domain/usecases/register_user_usecase.dart';
+import 'package:flutter_project/domain/valueobjects/address.dart';
+import 'package:flutter_project/domain/valueobjects/email.dart';
+import 'package:flutter_project/domain/valueobjects/password.dart';
+import 'package:uuid/uuid.dart';
 
 class UserForm extends StatefulWidget {
-  final UserRepository userRepository;
-  final UserDTO? user;
-  const UserForm({super.key, required this.userRepository, this.user});
+  final RegisterUserUseCase registerUserUseCase;
+  const UserForm({super.key, required this.registerUserUseCase});
 
   @override
   State<UserForm> createState() => _UserFormState();
@@ -20,87 +23,48 @@ class UserForm extends StatefulWidget {
 class _UserFormState extends State<UserForm> {
   final _formKey = GlobalKey<FormState>();
   final _emailController = TextEditingController();
-  final _emailValidator = EmailValidator();
   final _nameController = TextEditingController();
   final _passwordController = TextEditingController();
-  final _passwordValidator = PasswordValidator();
   final _addressController = TextEditingController();
-  final _addressValidator = AddressValidator();
-  final _urlImageController = TextEditingController();
   String? _userType;
 
-  @override
-  void initState() {
-    super.initState();
-    if (widget.user != null) {
-      _nameController.text = widget.user!.name;
-      _emailController.text = widget.user!.email;
-      _passwordController.text = widget.user!.password;
-      _userType = widget.user!.type;
-    }
-  }
+  final _emailValidator = EmailValidator();
+  final _passwordValidator = PasswordValidator();
+  final _addressValidator = AddressValidator();
 
-  String? _validateDuplicateEmail(String email) {
-    final existingUser = widget.userRepository.getUserByEmail(email);
-    if (existingUser != null && existingUser.id != widget.user?.id) {
-      return 'Já existe um usuário com esse e-mail';
-    }
-    return null;
-  }
-
-  void _submitForm() {
+  void _submitForm() async {
     if (_formKey.currentState!.validate()) {
-      final email = _emailController.text;
-      final name = _nameController.text;
-      final password = _passwordController.text;
-      final address = _addressController.text;
-      final type = _userType!;
-
-      final duplicateEmailError = _validateDuplicateEmail(email);
-      if (duplicateEmailError != null) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(duplicateEmailError)),
+      try {
+        final user = User(
+          id: Uuid().v4(),
+          name: _nameController.text,
+          email: Email(_emailController.text),
+          password: Password(_passwordController.text),
+          type: _userType == 'producer' ? UserType.producer : UserType.buyer,
+          address: Address(_addressController.text),
         );
-        return;
-      }
 
-      if (widget.user == null) {
-        final newUser = UserDTO(
-          name: name,
-          email: email,
-          password: password,
-          type: type,
-          address: address
-        );
-        widget.userRepository.addUser(newUser);
+        await widget.registerUserUseCase.call(user);
+
+        if (!mounted) return;
+
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text('Usuário registrado com sucesso!')),
         );
-      } else {
-        final updatedUser = UserDTO(
-          id: widget.user!.id,
-          name: name,
-          email: email,
-          password: password,
-          type: type,
-          address: address
-        );
-        widget.userRepository.updateUser(updatedUser);
+
+        Navigator.pushReplacementNamed(context, Routes.mainPage);
+      } catch (e) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Usuário atualizado com sucesso!')),
+          SnackBar(content: Text('Erro ao registrar: ${e.toString()}')),
         );
       }
-
-      Navigator.pushReplacementNamed(context, Routes.mainPage);
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    final isEditing = widget.user != null;
-
     return Scaffold(
-      appBar: CustomAppBar(title: isEditing ? 'Edição' : 'Cadastro', showAuthActions: false),
+      appBar: CustomAppBar(title: 'Cadastro', showAuthActions: false),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Center(
@@ -115,22 +79,16 @@ class _UserFormState extends State<UserForm> {
                   child: Column(
                     children: [
                       TextFormField(
-                        controller: _urlImageController,
+                        controller: _nameController,
                         decoration: const InputDecoration(
-                            hintText: 'Imagem (URL)', border: OutlineInputBorder()),
-                        validator: (value) {}
+                            hintText: 'Nome', border: OutlineInputBorder()),
+                        validator: (value) {
+                          if (value == null || value.trim().isEmpty) {
+                            return 'Preencha com um nome';
+                          }
+                          return null;
+                        },
                       ),
-                      const SizedBox(height: 16),
-                      TextFormField(
-                          controller: _nameController,
-                          decoration: const InputDecoration(
-                              hintText: 'Nome', border: OutlineInputBorder()),
-                          validator: (value) {
-                            if (value == null || value.isEmpty) {
-                              return 'Preencha com um nome';
-                            }
-                            return null;
-                          }),
                       const SizedBox(height: 16),
                       TextFormField(
                         controller: _emailController,
@@ -147,40 +105,30 @@ class _UserFormState extends State<UserForm> {
                         validator: _passwordValidator.validate,
                       ),
                       const SizedBox(height: 16),
-                      DropdownButtonFormField(
-                          value: _userType,
-                          decoration: const InputDecoration(
-                              hintText: 'Tipo de Usuário', border: OutlineInputBorder()),
-                          items: const [
-                            DropdownMenuItem(value: 'Comprador', child: Text('Comprador')),
-                            DropdownMenuItem(value: 'Produtor', child: Text('Produtor'))
-                          ],
-                          onChanged: (value) => {
-                                setState(() {
-                                  _userType = value;
-                                })
-                              },
-                          validator: (value) {
-                            if (value == null || value.isEmpty) {
-                              return 'Selecione um Tipo';
-                            }
-                            return null;
-                          }),
+                      DropdownButtonFormField<String>(
+                        value: _userType,
+                        decoration: const InputDecoration(
+                            hintText: 'Tipo de Usuário', border: OutlineInputBorder()),
+                        items: const [
+                          DropdownMenuItem(value: 'buyer', child: Text('Comprador')),
+                          DropdownMenuItem(value: 'producer', child: Text('Produtor')),
+                        ],
+                        onChanged: (value) => setState(() => _userType = value),
+                        validator: (value) =>
+                            value == null ? 'Selecione um tipo de usuário' : null,
+                      ),
                       const SizedBox(height: 16),
                       TextFormField(
                         controller: _addressController,
                         decoration: const InputDecoration(
                             hintText: 'Endereço', border: OutlineInputBorder()),
-                        obscureText: true,
                         validator: _addressValidator.validate,
                       ),
                       const SizedBox(height: 24),
-                      SubmitButton(
-                          onPressed: _submitForm,
-                          text: isEditing ? 'Atualizar' : 'Registrar')
+                      SubmitButton(onPressed: _submitForm, text: 'Registrar')
                     ],
                   ),
-                )
+                ),
               ],
             ),
           ),

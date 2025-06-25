@@ -1,4 +1,4 @@
-import 'package:flutter_project/data/models/company_dto.dart';
+import 'package:flutter_project/data/dto/company_dto.dart';
 import 'package:uuid/uuid.dart';
 
 class ProductDTO {

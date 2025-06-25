@@ -4,9 +4,9 @@ import 'package:flutter_project/core/components/submit_button.dart';
 import 'package:flutter_project/data/mock_product.dart';
 import 'package:flutter_project/data/mock_purchase.dart';
 import 'package:flutter_project/data/mock_users.dart';
-import 'package:flutter_project/core/utils/validators/address_validator.dart';
-import 'package:flutter_project/core/utils/validators/email_validator.dart';
-import 'package:flutter_project/core/utils/validators/integer_validator.dart';
+import 'package:flutter_project/presentation/validators/address_validator.dart';
+import 'package:flutter_project/presentation/validators/email_validator.dart';
+import 'package:flutter_project/presentation/validators/integer_validator.dart';
 
 class PurchaseForm extends StatefulWidget {
   @override

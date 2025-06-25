@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_project/core/components/submit_button.dart';
 import 'package:flutter_project/data/mock_companies.dart';
 import 'package:flutter_project/data/mock_users.dart';
-import 'package:flutter_project/core/utils/validators/address_validator.dart';
-import 'package:flutter_project/core/utils/validators/cnpj_validator.dart';
-import 'package:flutter_project/core/utils/validators/email_validator.dart';
+import 'package:flutter_project/presentation/validators/address_validator.dart';
+import 'package:flutter_project/presentation/validators/cnpj_validator.dart';
+import 'package:flutter_project/presentation/validators/email_validator.dart';
 
 class CompanyForm extends StatefulWidget {
   const CompanyForm({super.key});

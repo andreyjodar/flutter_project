@@ -32,39 +32,59 @@ class _UserFormState extends State<UserForm> {
   final _passwordValidator = PasswordValidator();
   final _addressValidator = AddressValidator();
 
+  bool _isLoading = false;
+
   void _submitForm() async {
-    if (_formKey.currentState!.validate()) {
-      try {
-        final user = User(
-          id: Uuid().v4(),
-          name: _nameController.text,
-          email: Email(_emailController.text),
-          password: Password(_passwordController.text),
-          type: _userType == 'producer' ? UserType.producer : UserType.buyer,
-          address: Address(_addressController.text),
-        );
+    if (!_formKey.currentState!.validate()) return;
 
-        await widget.registerUserUseCase.call(user);
+    setState(() => _isLoading = true);
 
-        if (!mounted) return;
+    try {
+      final user = User(
+        id: const Uuid().v4(), 
+        name: _nameController.text,
+        email: Email(_emailController.text),
+        password: Password(_passwordController.text),
 
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Usuário registrado com sucesso!')),
-        );
+        type: _userType == 'producer' ? UserType.producer : UserType.buyer,
+        address: Address(_addressController.text),
+      );
 
-        Navigator.pushReplacementNamed(context, Routes.mainPage);
-      } catch (e) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Erro ao registrar: ${e.toString()}')),
-        );
+      await widget.registerUserUseCase.call(user);
+
+      if (!mounted) return;
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Usuário registrado com sucesso!')),
+      );
+
+      if (!mounted) return;
+      Navigator.pushReplacementNamed(context, Routes.mainPage);
+    } catch (e) {
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Erro ao registrar: ${e.toString()}')),
+      );
+    } finally {
+      if (mounted) {
+        setState(() => _isLoading = false);
       }
     }
   }
 
   @override
+  void dispose() {
+    _emailController.dispose();
+    _nameController.dispose();
+    _passwordController.dispose();
+    _addressController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CustomAppBar(title: 'Cadastro', showAuthActions: false),
+      appBar: const CustomAppBar(title: 'Cadastro', showAuthActions: false),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Center(
@@ -108,10 +128,13 @@ class _UserFormState extends State<UserForm> {
                       DropdownButtonFormField<String>(
                         value: _userType,
                         decoration: const InputDecoration(
-                            hintText: 'Tipo de Usuário', border: OutlineInputBorder()),
+                            hintText: 'Tipo de Usuário',
+                            border: OutlineInputBorder()),
                         items: const [
-                          DropdownMenuItem(value: 'buyer', child: Text('Comprador')),
-                          DropdownMenuItem(value: 'producer', child: Text('Produtor')),
+                          DropdownMenuItem(
+                              value: 'buyer', child: Text('Comprador')),
+                          DropdownMenuItem(
+                              value: 'producer', child: Text('Produtor')),
                         ],
                         onChanged: (value) => setState(() => _userType = value),
                         validator: (value) =>
@@ -125,7 +148,12 @@ class _UserFormState extends State<UserForm> {
                         validator: _addressValidator.validate,
                       ),
                       const SizedBox(height: 24),
-                      SubmitButton(onPressed: _submitForm, text: 'Registrar')
+                      SubmitButton(
+                        onPressed: _submitForm,
+                        text: 'Registrar',
+                        isLoading: _isLoading, // O novo parâmetro isLoading
+                        loadingText: 'Registrando...', // Opcional, para feedback específico
+                      ),
                     ],
                   ),
                 ),

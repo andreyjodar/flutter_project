@@ -22,8 +22,8 @@ class UserAdapter {
     return UserDto(
       id: user.id,
       name: user.name,
-      email: user.email.value,
-      password: user.password.value,
+      email: user.email.toString(),
+      password: user.password.toString(),
       type: user.type.name,
       address: user.address?.value,
       registerDate: user.registerDate.toIso8601String(),

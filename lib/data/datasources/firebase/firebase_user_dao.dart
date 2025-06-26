@@ -1,6 +1,6 @@
 // data/datasources/firebase/firebase_user_dao.dart
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter_project/data/datasources/user_dao.dart';
+import 'package:flutter_project/data/datasources/interfaces/user_dao_interface.dart';
 import 'package:flutter_project/data/dto/user_dto.dart';
 
 class FirebaseUserDao implements UserDaoInterface {

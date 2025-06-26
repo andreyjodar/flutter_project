@@ -1,6 +1,6 @@
 import 'package:flutter_project/domain/repositories/user_repository_interface.dart';
 import 'package:flutter_project/domain/entities/user.dart';
-import 'package:flutter_project/data/datasources/user_dao.dart';
+import 'package:flutter_project/data/datasources/interfaces/user_dao_interface.dart';
 import 'package:flutter_project/data/dto/user_dto.dart';
 import 'package:flutter_project/infra/adapters/user_adapter.dart';
 

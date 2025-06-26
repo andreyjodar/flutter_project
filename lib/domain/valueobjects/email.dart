@@ -1,12 +1,13 @@
 class Email {
-  final String value;
+  final String _value;
 
-  Email(this.value) {
-    if (!RegExp(r'^[\w\.-]+@[\w\.-]+\.\w+$').hasMatch(value)) {
+  Email(String email) 
+    : _value = email {
+    if (!RegExp(r'^[\w\.-]+@[\w\.-]+\.\w+$').hasMatch(_value)) {
       throw Exception('Email com formato inválido');
     }
   }
 
   @override
-  String toString() => value;
+  String toString() => _value;
 }

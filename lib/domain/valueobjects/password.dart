@@ -1,12 +1,20 @@
 class Password {
-  final String value;
+  final String _value;
 
-  Password(this.value) {
-    if (value.length < 8) {
+  Password(String password) 
+    : _value = password {
+    if (_value.length < 8) {
       throw Exception('Senha tem menos de 8 caracteres');
     }
   }
 
+  bool isValid(String password) {
+    if(_value == password) {
+      return true;
+    }
+    return false;
+  }
+
   @override
-  String toString() => value;
+  String toString() => _value;
 }

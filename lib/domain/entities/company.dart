@@ -1,46 +1,61 @@
 import 'package:flutter_project/domain/entities/user.dart';
 import 'package:flutter_project/domain/valueobjects/Cnpj.dart';
 import 'package:flutter_project/domain/valueobjects/address.dart';
-import 'package:uuid/uuid.dart';
 
 class Company {
-  final String id;
-  String? urlImage;
-  String name;
-  String description;
-  final Cnpj cnpj;
-  final User producer;
-  Address address;
-  final DateTime registerDate;
+  final String _id;
+  String? _urlImage;
+  String _name;
+  String? _description;
+  final Cnpj _cnpj;
+  final User _producer;
+  Address _address;
+  final DateTime _registerDate;
 
   Company({
-    String? id,
-    this.urlImage,
-    required this.name,
-    required this.description,
-    required this.cnpj,
-    required this.producer,
-    required this.address,
+    required String id,
+    String? urlImage,
+    required String name,
+    String? description,
+    required Cnpj cnpj,
+    required User producer,
+    required Address address,
     DateTime? registerDate
-  })  : id = id ?? const Uuid().v4(),
-        registerDate = registerDate ?? DateTime.now()
+  })  : _id = id,
+        _urlImage = urlImage ?? 'https://cdn.pixabay.com/photo/2023/02/18/11/00/icon-7797704_1280.png',
+        _name = name,
+        _description = description ?? 'Default description here',
+        _cnpj = cnpj,
+        _producer = producer,
+        _address = address,
+        _registerDate = registerDate ?? DateTime.now()
   {
-    if(name.trim().isEmpty) throw Exception('Nome da empresa não pode ser vazio');
-    if(description.trim().isEmpty) throw Exception('Descrição da empresa não pode ser vazia');
-    if(producer.isBuyer()) throw Exception('Somente usuários do tipo produtor podem criar empresas');
+    if(!_producer.isProducer()) throw Exception('Usuário não tem a permissão de Produtor');
   }
+
+  String get id => _id;
+  String? get urlImage => _urlImage;
+  String get name => _name;
+  String? get description => _description;
+  String get cnpj => _cnpj.toString();
+  String get address => _address.toString();
+
 
   void changeName(String name) {
     if(name.trim().isEmpty) throw Exception('Nome da empresa não pode ser vazio');
-    this.name = name.trim();
+    _name = name.trim();
   }
 
   void changeDescription(String description) {
     if(description.trim().isEmpty) throw Exception('Descrição da empresa não pode ser vazia');
-    this.description = description.trim();
+    _description = description.trim();
+  }
+
+  void changePicture(String urlImage) {
+    _urlImage = urlImage;
   }
 
   void updateAddress(Address address) {
-    this.address = address;
+    _address = address;
   }
 }

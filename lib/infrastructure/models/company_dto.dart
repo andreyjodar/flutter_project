@@ -1,25 +1,23 @@
 import 'package:flutter_project/data/dto/user_dto.dart';
-import 'package:uuid/uuid.dart';
 
-class CompanyDTO {
+class CompanyDto {
   String id;
   String? urlImage;
   String name;
-  String description;
+  String? description;
   String cnpj;
   UserDto producer;
   String address;
   DateTime registerDate;
 
-  CompanyDTO({
-    String? id,
+  CompanyDto({
+    required this.id,
     this.urlImage,
     required this.name,
-    required this.description,
+    this.description,
     required this.cnpj,
     required this.producer,
     required this.address,
-    DateTime? registerDate,
-  })  : id = id ?? const Uuid().v4(),
-        registerDate = registerDate ?? DateTime.now();
+    required this.registerDate,
+  });
 }

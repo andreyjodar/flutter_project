@@ -6,7 +6,7 @@ enum UserType { producer, buyer }
 
 class User {
   final String _id;
-  String? _name;
+  String _name;
   final Email _email;
   Password _password;
   UserType _type;
@@ -15,7 +15,7 @@ class User {
 
   User({
     required String id,
-    String? name, 
+    required String name, 
     required Email email, 
     required Password password, 
     required UserType type,
@@ -27,26 +27,25 @@ class User {
        _password = password,
        _type = type,
        _address = address,
-       _registerDate = registerDate ?? DateTime.now() {
-          if (_name != null && _name!.isEmpty) throw Exception('Nome do usuário não pode ser vazio');
-       }
+       _registerDate = registerDate ?? DateTime.now();
 
   String get id => _id;
-
-  String? get name => _name;
-
-  Email get email => _email;
-
-  Password get password => _password;
-
+  String get name => _name;
+  String get email => _email.toString();
+  String get password => _password.toString(); // Ainda quero mudar isso!
   UserType get type => _type;
-
-  Address? get address => _address;
-
+  String? get address => _address.toString();
   DateTime get registerDate => _registerDate;
 
   void changePassword(Password password) {
     _password = password;
+  }
+
+  bool isValidPassword(String password) {
+    if(_password.toString() == password.trim()) {
+      return true;
+    }
+    return false;
   }
 
   void changeName(String name) {

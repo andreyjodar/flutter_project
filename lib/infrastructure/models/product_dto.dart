@@ -10,7 +10,7 @@ class ProductDTO {
   String status;
   String un;
   double price;
-  CompanyDTO company;
+  CompanyDto company;
   DateTime registerDate;
 
   ProductDTO({

@@ -12,7 +12,7 @@ class LoginUserUseCase {
 
     if(user == null) throw Exception('Usuário não encontrado');
 
-    if(!user.password.isValid(password)) throw Exception('Senha incorreta');
+    if(!user.isValidPassword(password)) throw Exception('Senha incorreta');
 
     return user;
   }

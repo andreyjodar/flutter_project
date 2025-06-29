@@ -74,7 +74,8 @@ class _LoginFormState extends State<LoginForm> {
                       TextFormField(
                         controller: _emailController,
                         decoration: const InputDecoration(
-                          hintText: 'Email',
+                          labelText: 'Email',
+                          hintText: 'teste@email.com',
                           border: OutlineInputBorder(),
                         ),
                         validator: _emailValidator.validate,
@@ -83,7 +84,7 @@ class _LoginFormState extends State<LoginForm> {
                       TextFormField(
                         controller: _passwordController,
                         decoration: const InputDecoration(
-                          hintText: 'Senha',
+                          labelText: 'Senha',
                           border: OutlineInputBorder(),
                         ),
                         obscureText: true,

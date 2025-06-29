@@ -25,7 +25,7 @@ class UserAdapter {
       email: user.email.toString(),
       password: user.password.toString(),
       type: user.type.name,
-      address: user.address?.value,
+      address: user.address,
       registerDate: user.registerDate.toIso8601String(),
     );
   }

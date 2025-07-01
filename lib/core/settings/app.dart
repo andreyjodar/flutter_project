@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_project/domain/usecases/get_producers_usecase.dart';
 import 'package:flutter_project/domain/usecases/register_company_usecase.dart';
+import 'package:flutter_project/domain/usecases/update_user_usecase.dart';
 import 'package:flutter_project/external/datasources/firebase/firebase_company_dao.dart';
 import 'package:flutter_project/external/datasources/firebase/firebase_user_dao.dart';
 import 'package:flutter_project/domain/usecases/login_user_usecase.dart';
@@ -25,17 +26,17 @@ class App extends StatelessWidget {
   Widget build(BuildContext context) {
 
     return MaterialApp(
-      initialRoute: Routes.mainPage,
+      initialRoute: Routes.login,
       debugShowCheckedModeBanner: false,
       routes: {
         Routes.mainPage: (context) => MenuPages(),
         Routes.login: (context) => LoginForm(loginUserUseCase: LoginUserUseCase(UserRepositoryImpl(FirebaseUserDao(FirebaseFirestore.instance)))),
-        Routes.userForm: (context) => UserForm(registerUserUseCase: RegisterUserUseCase(UserRepositoryImpl(FirebaseUserDao(FirebaseFirestore.instance)))),
+        Routes.userForm: (context) => UserForm(updateUserUseCase: UpdateUserUseCase((UserRepositoryImpl(FirebaseUserDao(FirebaseFirestore.instance)))), registerUserUseCase: RegisterUserUseCase(UserRepositoryImpl(FirebaseUserDao(FirebaseFirestore.instance)))),
         Routes.company: (context) => CompanyPage(),
         Routes.companyForm: (context) => CompanyForm(registerCompanyUseCase: RegisterCompanyUseCase(CompanyRepositoryImpl(companyDao: FirebaseCompanyDao(FirebaseFirestore.instance), userDao: FirebaseUserDao(FirebaseFirestore.instance))), getProducersUseCase: GetProducersUseCase(UserRepositoryImpl(FirebaseUserDao(FirebaseFirestore.instance)))),
         Routes.product: (context) => ProductPage(),
         Routes.productForm: (context) => ProductForm(),
-        Routes.purchaseForm: (context) => PurchaseForm(),
+        // Routes.purchaseForm: (context) => PurchaseForm(),
       }
     );
   }

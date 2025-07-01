@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_project/core/components/appbar.dart';
 import 'package:flutter_project/core/components/submit_button.dart';
+import 'package:flutter_project/core/settings/routes.dart';
 import 'package:flutter_project/domain/usecases/login_user_usecase.dart';
-import 'package:flutter_project/domain/valueobjects/email.dart';
-import 'package:flutter_project/domain/valueobjects/password.dart';
+import 'package:flutter_project/presentation/stores/logged_user_store.dart';
 import 'package:flutter_project/presentation/validators/email_validator.dart';
 import 'package:flutter_project/presentation/validators/password_validator.dart';
+import 'package:provider/provider.dart';
 
 class LoginForm extends StatefulWidget {
   final LoginUserUseCase loginUserUseCase;
@@ -32,10 +33,10 @@ class _LoginFormState extends State<LoginForm> {
     setState(() => _isLoading = true);
 
     try {
-      final email = Email(_emailController.text);
-      final password = Password(_passwordController.text);
+      final email = _emailController.text;
+      final password = _passwordController.text;
 
-      final user = await widget.loginUserUseCase(email.toString(), password.toString());
+      final user = await widget.loginUserUseCase(email, password);
 
       if (!mounted) return;
 
@@ -43,7 +44,8 @@ class _LoginFormState extends State<LoginForm> {
         const SnackBar(content: Text('Login realizado com sucesso!')),
       );
 
-      Navigator.pop(context); // ou navegar para a tela principal
+      Provider.of<LoggedUserStore>(context, listen: false).setUser(user);
+      Navigator.pushReplacementNamed(context, Routes.mainPage); 
     } catch (e) {
       if (!mounted) return;
 

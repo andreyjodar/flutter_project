@@ -1,6 +1,6 @@
 // adapters/user_adapter.dart
 import 'package:flutter_project/domain/entities/user.dart';
-import 'package:flutter_project/data/dto/user_dto.dart';
+import 'package:flutter_project/infrastructure/models/user_dto.dart';
 import 'package:flutter_project/domain/valueobjects/email.dart';
 import 'package:flutter_project/domain/valueobjects/password.dart';
 import 'package:flutter_project/domain/valueobjects/address.dart';

@@ -1,8 +1,8 @@
 import 'package:flutter_project/domain/repositories/user_repository_interface.dart';
 import 'package:flutter_project/domain/entities/user.dart';
-import 'package:flutter_project/data/datasources/interfaces/user_dao_interface.dart';
-import 'package:flutter_project/data/dto/user_dto.dart';
-import 'package:flutter_project/infra/adapters/user_adapter.dart';
+import 'package:flutter_project/infrastructure/datasources/user_dao_interface.dart';
+import 'package:flutter_project/infrastructure/models/user_dto.dart';
+import 'package:flutter_project/infrastructure/adapters/user_adapter.dart';
 
 class UserRepositoryImpl implements UserRepositoryInterface {
   final UserDaoInterface userDao;
@@ -11,14 +11,14 @@ class UserRepositoryImpl implements UserRepositoryInterface {
 
   @override
   Future<void> createUser(User user) async {
-    final dto = UserAdapter.toDto(user);
-    await userDao.create(dto);
+    final userDto = UserAdapter.toDto(user);
+    await userDao.create(userDto);
   }
 
   @override
   Future<void> updateUser(User user) async {
-    final dto = UserAdapter.toDto(user);
-    await userDao.update(dto);
+    final userDto = UserAdapter.toDto(user);
+    await userDao.update(userDto);
   }
 
   @override
@@ -28,20 +28,29 @@ class UserRepositoryImpl implements UserRepositoryInterface {
 
   @override
   Future<User?> getUserById(String id) async {
-    final dto = await userDao.getById(id);
-    return dto != null ? UserAdapter.fromDto(dto) : null;
+    final userDto = await userDao.getById(id);
+    return userDto != null ? UserAdapter.fromDto(userDto) : null;
+  }
+
+  @override
+  Future<List<User>> getUsersByType(UserType type) async {
+    final usersDto = await userDao.getByType(type);
+    return usersDto 
+        .whereType<UserDto>()
+        .map(UserAdapter.fromDto)
+        .toList();  
   }
 
   @override
   Future<User?> getUserByEmail(String email) async {
-    final dto = await userDao.getByEmail(email);
-    return dto != null ? UserAdapter.fromDto(dto) : null;
+    final userDto = await userDao.getByEmail(email);
+    return userDto != null ? UserAdapter.fromDto(userDto) : null;
   }
 
   @override
   Future<List<User>> getAllUsers() async {
-    final dtos = await userDao.getAll();
-    return dtos
+    final usersDto = await userDao.getAll();
+    return usersDto
         .whereType<UserDto>()
         .map(UserAdapter.fromDto)
         .toList();

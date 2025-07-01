@@ -1,13 +1,23 @@
+// presentation/pages/company/company_form.dart
 import 'package:flutter/material.dart';
+import 'package:flutter_project/core/components/appbar.dart';
 import 'package:flutter_project/core/components/submit_button.dart';
-import 'package:flutter_project/data/mock_companies.dart';
-import 'package:flutter_project/data/mock_users.dart';
+import 'package:flutter_project/domain/entities/company.dart';
+import 'package:flutter_project/domain/entities/user.dart';
+import 'package:flutter_project/domain/usecases/get_producers_usecase.dart';
+import 'package:flutter_project/domain/usecases/register_company_usecase.dart';
+import 'package:flutter_project/domain/valueobjects/Cnpj.dart';
+import 'package:flutter_project/domain/valueobjects/address.dart';
 import 'package:flutter_project/presentation/validators/address_validator.dart';
 import 'package:flutter_project/presentation/validators/cnpj_validator.dart';
-import 'package:flutter_project/presentation/validators/email_validator.dart';
+import 'package:uuid/uuid.dart';
 
 class CompanyForm extends StatefulWidget {
-  const CompanyForm({super.key});
+  final GetProducersUseCase getProducersUseCase;
+  final RegisterCompanyUseCase registerCompanyUseCase;
+
+  const CompanyForm({super.key, required this.getProducersUseCase, required this.registerCompanyUseCase});
+
   @override
   State<CompanyForm> createState() => _CompanyFormState();
 }
@@ -15,87 +25,170 @@ class CompanyForm extends StatefulWidget {
 class _CompanyFormState extends State<CompanyForm> {
   final _formKey = GlobalKey<FormState>();
   final _nameController = TextEditingController();
-  final _emailController = TextEditingController();
-  final _emailValidator = EmailValidator();
+  final _urlImageController = TextEditingController();
+  final _descriptionController = TextEditingController();
   final _cnpjController = TextEditingController();
-  final _cnpjValidator = CnpjValidator();
   final _addressController = TextEditingController();
+  final _cnpjValidator = CnpjValidator();
   final _addressValidator = AddressValidator();
 
-  String? _validateCompany(String name, String email, String cnpj) {
-    var mockCompanyName = getCompanyByName(name);
-    var mockCompanyCnpj = getCompanyByCnpj(cnpj);
-    var mockUser = getUserByEmail(email);
-    if (mockCompanyName != null || mockCompanyCnpj != null) {
-      return 'Empresa já cadastrada';
-    }
-    if (mockUser == null) {
-      return 'Email não registrado por um Produtor';
-    }
-    if (mockUser['type'] == 'Comprador') {
-      return 'Usuário sem premissão de Produtor';
-    }
-    return null;
+  List<User> _producers = [];
+  User? _selectedProducer;
+  bool _isLoading = true;
+  bool _isSubmitting = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadProducers();
   }
 
-  void _submitCompany() {
-    if (_formKey.currentState!.validate()) {
-      final name = _nameController.text;
-      final email = _emailController.text;
-      final cnpj = _cnpjController.text;
-      final error = _validateCompany(name, email, cnpj);
-      if (error == null) {
-        final address = _addressController.text;
-        addCompany(name, email, cnpj, address);
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Empresa registrada com sucesso!')),
-        );
-        Navigator.pop(context);
-      } else {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(error)),
-        );
-      }
+  Future<void> _loadProducers() async {
+    try {
+      final producers = await widget.getProducersUseCase();
+      setState(() {
+        _producers = producers;
+        _isLoading = false;
+      });
+    } catch (e) {
+      setState(() {
+        _isLoading = false;
+      });
+      
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Erro ao carregar produtores: $e')),
+      );
     }
   }
+
+void _submitCompany() async {
+  if (_formKey.currentState!.validate() && _selectedProducer != null) {
+    setState(() => _isSubmitting = true); // Ativa o loading do botão
+
+    try {
+      final company = Company(
+        id: Uuid().v4(),
+        name: _nameController.text.trim(),
+        cnpj: Cnpj(_cnpjController.text),
+        address: Address(_addressController.text),
+        producer: _selectedProducer!,
+        urlImage: _urlImageController.text.isEmpty ? null : _urlImageController.text.trim(),
+        description: _descriptionController.text.isEmpty ? null : _descriptionController.text.trim(),
+      );
+
+      await widget.registerCompanyUseCase(company);
+
+      if (!mounted) return;
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Empresa registrada com sucesso!')),
+      );
+      Navigator.pop(context);
+    } catch (e) {
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Erro ao registrar empresa: $e')),
+      );
+    } finally {
+      if (mounted) setState(() => _isSubmitting = false); // Desativa o loading
+    }
+  } else {
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(content: Text('Preencha todos os campos obrigatórios')),
+    );
+  }
+}
 
   @override
   Widget build(BuildContext context) {
-    return Form(
-      key: _formKey,
-      child: Column(
-        children: [
-          TextFormField(
-              controller: _nameController,
-              decoration: const InputDecoration(
-                  hintText: 'Nome', border: OutlineInputBorder()),
-              validator: (value) {
-                if (value == null || value.isEmpty) {
-                  return 'Nome nulo ou vazio';
-                }
-                return null;
-              }),
-          const SizedBox(height: 16),
-          TextFormField(
-              controller: _emailController,
-              decoration: const InputDecoration(
-                  hintText: 'Email', border: OutlineInputBorder()),
-              validator: _emailValidator.validate),
-          const SizedBox(height: 16),
-          TextFormField(
-              controller: _cnpjController,
-              decoration: const InputDecoration(
-                  hintText: 'CNPJ', border: OutlineInputBorder()),
-              validator: _cnpjValidator.validate),
-          const SizedBox(height: 16),
-          TextFormField(
-              controller: _addressController,
-              decoration: const InputDecoration(
-                  hintText: 'Endereço', border: OutlineInputBorder()),
-              validator: _addressValidator.validate),
-          const SizedBox(height: 24),
-          SubmitButton(onPressed: _submitCompany, text: 'Cadastrar')
-        ],
+    return Scaffold(
+      appBar: CustomAppBar(title: 'Cadastro', showAuthActions: false),
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: SingleChildScrollView(
+          child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const Icon(Icons.store, size: 100, color: Colors.green),
+                const SizedBox(height: 24),
+                _isLoading ? const Center(child: CircularProgressIndicator()) 
+                : Form(
+                    key: _formKey,
+                    child: Column(
+                      children: [
+                        TextFormField(
+                          controller: _nameController,
+                          decoration: const InputDecoration(
+                            labelText: 'Nome',
+                            border: OutlineInputBorder()
+                          ),
+                          validator: (value) =>
+                              (value == null || value.isEmpty) ? 'Nome obrigatório' : null,
+                        ),
+                        const SizedBox(height: 16),
+                        TextFormField(
+                          controller: _urlImageController,
+                          decoration: const InputDecoration(
+                            labelText: 'URL Imagem',
+                            border: OutlineInputBorder()
+                          ),
+                        ),
+                        const SizedBox(height: 16),
+                        TextFormField(
+                          controller: _descriptionController,
+                          decoration: const InputDecoration(
+                            labelText: 'Descrição',
+                            border: OutlineInputBorder()
+                          ),
+                        ),
+                        const SizedBox(height: 16),
+                        DropdownButtonFormField<User>(
+                          value: _selectedProducer,
+                          items: _producers
+                              .map((u) => DropdownMenuItem(
+                                    value: u,
+                                    child: Text(u.name),
+                                  ))
+                              .toList(),
+                          onChanged: (value) => setState(() => _selectedProducer = value),
+                          validator: (value) =>
+                              value == null ? 'Selecione um produtor' : null,
+                          decoration: const InputDecoration(
+                            labelText: 'Produtor',
+                            border: OutlineInputBorder()
+                          ),
+                        ),
+                        const SizedBox(height: 16),
+                        TextFormField(
+                          controller: _cnpjController,
+                          decoration: const InputDecoration(
+                            labelText: 'CNPJ',
+                            hintText: '00.000.000/0000-00', border: OutlineInputBorder()),
+                          validator: _cnpjValidator.validate,
+                        ),
+                        const SizedBox(height: 16),
+                        TextFormField(
+                          controller: _addressController,
+                          decoration: const InputDecoration(
+                            labelText: 'Endereço',
+                            hintText: 'Rua Limoeiro, 99', border: OutlineInputBorder()
+                          ),
+                          validator: _addressValidator.validate,
+                        ),
+                        const SizedBox(height: 24),
+                        SubmitButton(
+                          onPressed: _submitCompany, 
+                          text: 'Cadastrar',
+                          isLoading: _isSubmitting,
+                          loadingText: 'Salvando...',
+                        )
+                      ],
+                    ),
+                  ),
+              ]
+          ),
+        ),
       ),
     );
   }

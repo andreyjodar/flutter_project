@@ -24,7 +24,7 @@ class Company {
   })  : _id = id,
         _urlImage = urlImage ?? 'https://cdn.pixabay.com/photo/2023/02/18/11/00/icon-7797704_1280.png',
         _name = name,
-        _description = description ?? 'Default description here',
+        _description = description,
         _cnpj = cnpj,
         _producer = producer,
         _address = address,
@@ -39,6 +39,8 @@ class Company {
   String? get description => _description;
   String get cnpj => _cnpj.toString();
   String get address => _address.toString();
+  User get producer => _producer;
+  DateTime get registerDate => _registerDate;
 
 
   void changeName(String name) {

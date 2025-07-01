@@ -1,4 +1,4 @@
-import 'package:flutter_project/data/dto/product_dto.dart';
+import 'package:flutter_project/infrastructure/models/product_dto.dart';
 import 'package:uuid/uuid.dart';
 
 class CartItemDTO {

@@ -3,17 +3,14 @@ import 'package:flutter_project/domain/entities/user.dart';
 import 'package:flutter_project/domain/repositories/user_repository_interface.dart';
 
 class LoginUserUseCase {
-  final UserRepositoryInterface repository;
+  final UserRepositoryInterface _repository;
 
-  LoginUserUseCase(this.repository);
+  LoginUserUseCase(this._repository);
 
   Future<User> call(String email, String password) async {
-    final user = await repository.getUserByEmail(email);
-
+    final user = await _repository.getUserByEmail(email);
     if(user == null) throw Exception('Usuário não encontrado');
-
     if(!user.isValidPassword(password)) throw Exception('Senha incorreta');
-
     return user;
   }
 }

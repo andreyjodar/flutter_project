@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:flutter_project/core/components/appbar.dart';
 import 'package:flutter_project/core/components/submit_button.dart';
 import 'package:flutter_project/core/settings/routes.dart';
+import 'package:flutter_project/presentation/stores/logged_user_store.dart';
 import 'package:flutter_project/presentation/validators/address_validator.dart';
 import 'package:flutter_project/presentation/validators/email_validator.dart';
 import 'package:flutter_project/presentation/validators/password_validator.dart';
@@ -59,6 +61,7 @@ class _UserFormState extends State<UserForm> {
       );
 
       if (!mounted) return;
+      Provider.of<LoggedUserStore>(context, listen: false).setUser(user);
       Navigator.pushReplacementNamed(context, Routes.mainPage);
     } catch (e) {
       if (!mounted) return;
@@ -101,7 +104,8 @@ class _UserFormState extends State<UserForm> {
                       TextFormField(
                         controller: _nameController,
                         decoration: const InputDecoration(
-                            hintText: 'Nome', border: OutlineInputBorder()),
+                          labelText: 'Nome', 
+                          border: OutlineInputBorder()),
                         validator: (value) {
                           if (value == null || value.trim().isEmpty) {
                             return 'Preencha com um nome';
@@ -113,14 +117,17 @@ class _UserFormState extends State<UserForm> {
                       TextFormField(
                         controller: _emailController,
                         decoration: const InputDecoration(
-                            hintText: 'Email', border: OutlineInputBorder()),
+                          labelText: 'Email',
+                          hintText: 'frutify@email.com', 
+                          border: OutlineInputBorder()),
                         validator: _emailValidator.validate,
                       ),
                       const SizedBox(height: 16),
                       TextFormField(
                         controller: _passwordController,
                         decoration: const InputDecoration(
-                            hintText: 'Senha', border: OutlineInputBorder()),
+                          labelText: 'Senha', 
+                          border: OutlineInputBorder()),
                         obscureText: true,
                         validator: _passwordValidator.validate,
                       ),
@@ -128,8 +135,8 @@ class _UserFormState extends State<UserForm> {
                       DropdownButtonFormField<String>(
                         value: _userType,
                         decoration: const InputDecoration(
-                            hintText: 'Tipo de Usuário',
-                            border: OutlineInputBorder()),
+                          labelText: 'Tipo de Usuário',
+                          border: OutlineInputBorder()),
                         items: const [
                           DropdownMenuItem(
                               value: 'buyer', child: Text('Comprador')),
@@ -144,15 +151,17 @@ class _UserFormState extends State<UserForm> {
                       TextFormField(
                         controller: _addressController,
                         decoration: const InputDecoration(
-                            hintText: 'Endereço', border: OutlineInputBorder()),
+                          labelText: 'Endereço',
+                          hintText: 'Rua Limoeiro, 99',
+                          border: OutlineInputBorder()),
                         validator: _addressValidator.validate,
                       ),
                       const SizedBox(height: 24),
                       SubmitButton(
                         onPressed: _submitForm,
                         text: 'Registrar',
-                        isLoading: _isLoading, // O novo parâmetro isLoading
-                        loadingText: 'Registrando...', // Opcional, para feedback específico
+                        isLoading: _isLoading, 
+                        loadingText: 'Registrando...',
                       ),
                     ],
                   ),

@@ -1,7 +1,8 @@
 // data/datasources/firebase/firebase_user_dao.dart
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter_project/data/datasources/interfaces/user_dao_interface.dart';
-import 'package:flutter_project/data/dto/user_dto.dart';
+import 'package:flutter_project/domain/entities/user.dart';
+import 'package:flutter_project/infrastructure/datasources/user_dao_interface.dart';
+import 'package:flutter_project/infrastructure/models/user_dto.dart';
 
 class FirebaseUserDao implements UserDaoInterface {
   final FirebaseFirestore _firestore;
@@ -45,6 +46,16 @@ class FirebaseUserDao implements UserDaoInterface {
       return UserDto.fromMap(query.docs.first.data());
     }
     return null;
+  }
+
+  @override
+  Future<List<UserDto>> getByType(UserType type) async {
+    String typeDb = type == UserType.producer ? 'producer' : 'buyer'; // pois só existem 2 tipos
+    final query = await _firestore
+        .collection(_collectionPath)
+        .where('type', isEqualTo: typeDb)
+        .get();
+    return query.docs.map((doc) => UserDto.fromMap(doc.data())).toList();
   }
 
   @override

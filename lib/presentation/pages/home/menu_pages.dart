@@ -1,5 +1,10 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_project/core/components/appbar.dart';
+import 'package:flutter_project/domain/usecases/delete_user_usecase.dart';
+import 'package:flutter_project/domain/usecases/update_user_usecase.dart';
+import 'package:flutter_project/external/datasources/firebase/firebase_user_dao.dart';
+import 'package:flutter_project/infrastructure/repositories/user_repository_impl.dart';
 import 'package:flutter_project/presentation/pages/home/profile_page.dart';
 import 'package:flutter_project/presentation/pages/home/home_page.dart';
 import 'package:flutter_project/presentation/pages/purchase/purchase_log_page.dart';
@@ -17,7 +22,7 @@ class _MenuPagesState extends State<MenuPages> {
     HomePage(),
     ShoppingPage(),
     PurchaseLogPage(),
-    ProfilePage()
+    ProfilePage(updateUserUseCase: UpdateUserUseCase(UserRepositoryImpl(FirebaseUserDao(FirebaseFirestore.instance))),deleteUserUseCase: DeleteUserUseCase(UserRepositoryImpl(FirebaseUserDao(FirebaseFirestore.instance))),)
   ];
 
   void _onItemTapped(int index) {

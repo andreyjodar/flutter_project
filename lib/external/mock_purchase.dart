@@ -1,4 +1,4 @@
-import 'package:flutter_project/data/mock_product.dart';
+import 'package:flutter_project/external/mock_product.dart';
 
 List<Map<String, dynamic>> _fakePurchase = [
   {

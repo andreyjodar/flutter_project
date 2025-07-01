@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_project/core/components/submit_button.dart';
-import 'package:flutter_project/data/mock_companies.dart';
-import 'package:flutter_project/data/mock_product.dart';
+import 'package:flutter_project/external/mock_companies.dart';
+import 'package:flutter_project/external/mock_product.dart';
 import 'package:flutter_project/presentation/validators/decimal_validator.dart';
 
 class ProductForm extends StatefulWidget {

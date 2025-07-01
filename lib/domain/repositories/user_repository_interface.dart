@@ -4,6 +4,7 @@ abstract class UserRepositoryInterface {
   Future<User?> getUserById(String id);
   Future<User?> getUserByEmail(String email);
   Future<List<User>> getAllUsers();
+  Future<List<User>> getUsersByType(UserType type);
   Future<void> createUser(User user);
   Future<void> updateUser(User user);
   Future<void> deleteUser(String id);

@@ -1,14 +1,12 @@
-import 'package:flutter_project/data/dto/user_dto.dart';
-
 class CompanyDto {
   String id;
   String? urlImage;
   String name;
   String? description;
   String cnpj;
-  UserDto producer;
+  String producerId;
   String address;
-  DateTime registerDate;
+  String registerDate;
 
   CompanyDto({
     required this.id,
@@ -16,8 +14,34 @@ class CompanyDto {
     required this.name,
     this.description,
     required this.cnpj,
-    required this.producer,
+    required this.producerId,
     required this.address,
     required this.registerDate,
   });
+
+    factory CompanyDto.fromMap(Map<String, dynamic> map) {
+    return CompanyDto(
+      id: map['id'],
+      urlImage: map['urlImage'],
+      name: map['name'],
+      description: map['description'],
+      cnpj: map['cnpj'],
+      producerId: map['producerId'],
+      address: map['address'],
+      registerDate: map['registerDate'],
+    );
+  }
+
+  Map<String, dynamic> toMap() {
+    return {
+      'id': id,
+      'urlImage': urlImage,
+      'name': name,
+      'description': description,
+      'cnpj': cnpj,
+      'producerId': producerId,
+      'address': address,
+      'registerDate': registerDate,
+    };
+  }
 }

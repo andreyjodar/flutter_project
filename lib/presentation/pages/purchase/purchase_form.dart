@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_project/core/components/submit_button.dart';
-import 'package:flutter_project/data/mock_product.dart';
-import 'package:flutter_project/data/mock_purchase.dart';
-import 'package:flutter_project/data/mock_users.dart';
+import 'package:flutter_project/external/mock_product.dart';
+import 'package:flutter_project/external/mock_purchase.dart';
+import 'package:flutter_project/external/mock_users.dart';
 import 'package:flutter_project/presentation/validators/address_validator.dart';
 import 'package:flutter_project/presentation/validators/email_validator.dart';
 import 'package:flutter_project/presentation/validators/integer_validator.dart';

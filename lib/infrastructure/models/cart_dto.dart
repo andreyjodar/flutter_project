@@ -1,5 +1,5 @@
-import 'package:flutter_project/data/dto/cart_item_dto.dart';
-import 'package:flutter_project/data/dto/user_dto.dart';
+import 'package:flutter_project/infrastructure/models/cart_item_dto.dart';
+import 'package:flutter_project/infrastructure/models/user_dto.dart';
 import 'package:uuid/uuid.dart';
 
 class CartDTO {

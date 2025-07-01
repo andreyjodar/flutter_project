@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_project/core/settings/app.dart';
+import 'package:flutter_project/presentation/stores/logged_user_store.dart';
+import 'package:provider/provider.dart';
 import "core/firebase/firebase_options.dart";
 
 void main() async {
@@ -9,5 +11,12 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  runApp(const App());
+  runApp(
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (_) => LoggedUserStore())
+      ], 
+      child: const App()
+    ),
+  );
 }

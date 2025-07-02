@@ -109,7 +109,12 @@ class _CompanyFormState extends State<CompanyForm> {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text('Empresa salva com sucesso!')),
         );
-        Navigator.pop(context);
+
+        if (isEditing) {
+          Navigator.pop(context, company); // Atualiza a empresa
+        } else {
+          Navigator.pop(context); // Cria uma nova empresa
+        }
       } catch (e) {
         if (mounted) {
           ScaffoldMessenger.of(context).showSnackBar(

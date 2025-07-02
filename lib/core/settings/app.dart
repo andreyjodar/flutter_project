@@ -34,7 +34,7 @@ class App extends StatelessWidget {
         Routes.mainPage: (context) => MenuPages(),
         Routes.login: (context) => LoginForm(loginUserUseCase: LoginUserUseCase(UserRepositoryImpl(FirebaseUserDao(FirebaseFirestore.instance)))),
         Routes.userForm: (context) => UserForm(updateUserUseCase: UpdateUserUseCase((UserRepositoryImpl(FirebaseUserDao(FirebaseFirestore.instance)))), registerUserUseCase: RegisterUserUseCase(UserRepositoryImpl(FirebaseUserDao(FirebaseFirestore.instance)))),
-        Routes.company: (context) => CompanyPage(deleteCompanyUseCase: DeleteCompanyUseCase(CompanyRepositoryImpl(userDao: FirebaseUserDao(FirebaseFirestore.instance), companyDao: FirebaseCompanyDao(FirebaseFirestore.instance)))),
+        Routes.company: (context) => CompanyPage(initialCompany: ModalRoute.of(context)?.settings.arguments as Company, deleteCompanyUseCase: DeleteCompanyUseCase(CompanyRepositoryImpl(userDao: FirebaseUserDao(FirebaseFirestore.instance), companyDao: FirebaseCompanyDao(FirebaseFirestore.instance)))),
         Routes.companyForm: (context) => CompanyForm(existingCompany: ModalRoute.of(context)?.settings.arguments as Company?, updateCompanyUseCase: UpdateCompanyUseCase(CompanyRepositoryImpl(companyDao: FirebaseCompanyDao(FirebaseFirestore.instance), userDao: FirebaseUserDao(FirebaseFirestore.instance))), registerCompanyUseCase: RegisterCompanyUseCase(CompanyRepositoryImpl(companyDao: FirebaseCompanyDao(FirebaseFirestore.instance), userDao: FirebaseUserDao(FirebaseFirestore.instance))), getProducersUseCase: GetProducersUseCase(UserRepositoryImpl(FirebaseUserDao(FirebaseFirestore.instance)))),
         Routes.product: (context) => ProductPage(),
         Routes.productForm: (context) => ProductForm(),

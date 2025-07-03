@@ -13,7 +13,8 @@ class CompanyAdapter {
       description: dto.description, 
       cnpj: Cnpj(dto.cnpj), 
       producer: producer, 
-      address: Address(dto.address)
+      address: Address(dto.address),
+      registerDate: DateTime.parse(dto.registerDate)
     );
   }
 

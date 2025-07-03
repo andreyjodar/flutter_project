@@ -1,20 +1,23 @@
-import 'package:flutter_project/infrastructure/adapters/user_adapter.dart';
-import 'package:flutter_project/infrastructure/datasources/company_dao_interface.dart';
+import 'package:flutter_project/domain/entities/user.dart';
 import 'package:flutter_project/domain/entities/company.dart';
 import 'package:flutter_project/domain/repositories/company_repository_interface.dart';
+import 'package:flutter_project/domain/repositories/user_repository_interface.dart';
 import 'package:flutter_project/infrastructure/adapters/company_adapter.dart';
-import 'package:flutter_project/infrastructure/datasources/user_dao_interface.dart';
+import 'package:flutter_project/infrastructure/datasources/company_dao_interface.dart';
 
-class CompanyRepositoryImpl extends CompanyRepositoryInterface{
+class CompanyRepositoryImpl extends CompanyRepositoryInterface {
   final CompanyDaoInterface companyDao;
-  final UserDaoInterface userDao;
+  final UserRepositoryInterface userRepository;
 
-  CompanyRepositoryImpl({required this.companyDao, required this.userDao});
+  CompanyRepositoryImpl({
+    required this.companyDao,
+    required this.userRepository,
+  });
 
   @override
   Future<void> createCompany(Company company) async {
-    final dto = CompanyAdapter.toDto(company);
-    await companyDao.create(dto);
+    final companyDto = CompanyAdapter.toDto(company);
+    await companyDao.create(companyDto);
   }
 
   @override
@@ -25,17 +28,11 @@ class CompanyRepositoryImpl extends CompanyRepositoryInterface{
   @override
   Future<List<Company>> getAllCompanies() async {
     final companiesDto = await companyDao.getAll();
-    List<Company> companies = [];
 
-    for (final companyDto in companiesDto) {
-      final userDto = await userDao.getById(companyDto.producerId);
-      if (userDto == null) {
-        continue; 
-      }
-      final user = UserAdapter.fromDto(userDto);
-      final company = CompanyAdapter.fromDto(companyDto, user);
-      companies.add(company);
-    }
+    final companies = await Future.wait(companiesDto.map((dto) async {
+      final producer = await _getProducer(dto.producerId);
+      return CompanyAdapter.fromDto(dto, producer);
+    }));
 
     return companies;
   }
@@ -43,35 +40,28 @@ class CompanyRepositoryImpl extends CompanyRepositoryInterface{
   @override
   Future<List<Company>> getCompaniesByUser(String userId) async {
     final companiesDto = await companyDao.getByUser(userId);
+    final producer = await _getProducer(userId);
 
-    final userDto = await userDao.getById(userId);
-    if (userDto == null) throw Exception('Produtor não encontrado');
-
-    final user = UserAdapter.fromDto(userDto);
-    return companiesDto.map((dto) => CompanyAdapter.fromDto(dto, user)).toList();
+    return companiesDto
+        .map((dto) => CompanyAdapter.fromDto(dto, producer))
+        .toList();
   }
 
   @override
   Future<Company?> getCompanyById(String id) async {
     final companyDto = await companyDao.getById(id);
-    if(companyDto == null) return null; 
+    if (companyDto == null) return null;
 
-    final userDto = await userDao.getById(companyDto.producerId);
-    if(userDto == null) throw Exception('Produtor não encontrado');
-    
-    final producer = UserAdapter.fromDto(userDto);
-    return CompanyAdapter.fromDto(companyDto, producer); 
+    final producer = await _getProducer(companyDto.producerId);
+    return CompanyAdapter.fromDto(companyDto, producer);
   }
 
   @override
   Future<Company?> getCompanyByCnpj(String cnpj) async {
     final companyDto = await companyDao.getByCnpj(cnpj);
-    if(companyDto == null) return null;
+    if (companyDto == null) return null;
 
-    final userDto = await userDao.getById(companyDto.producerId);
-    if(userDto == null) throw Exception('Produtor não encontrado');
-
-    final producer = UserAdapter.fromDto(userDto);
+    final producer = await _getProducer(companyDto.producerId);
     return CompanyAdapter.fromDto(companyDto, producer);
   }
 
@@ -79,5 +69,13 @@ class CompanyRepositoryImpl extends CompanyRepositoryInterface{
   Future<void> updateCompany(Company company) async {
     final dto = CompanyAdapter.toDto(company);
     await companyDao.update(dto);
+  }
+
+  Future<User> _getProducer(String userId) async {
+    final user = await userRepository.getUserById(userId);
+    if (user == null) {
+      throw Exception('Produtor com ID "$userId" não encontrado');
+    }
+    return user;
   }
 }

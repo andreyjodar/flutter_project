@@ -12,7 +12,7 @@ class UserAdapter {
       name: dto.name,
       email: Email(dto.email),
       password: Password(dto.password),
-      type: dto.type == 'producer' ? UserType.producer : UserType.buyer,
+      type: _getUserType(dto.type),
       address: dto.address != null ? Address(dto.address!) : null,
       registerDate: DateTime.parse(dto.registerDate),
     );
@@ -28,5 +28,16 @@ class UserAdapter {
       address: user.address,
       registerDate: user.registerDate.toIso8601String(),
     );
+  }
+
+  static UserType _getUserType(String type) {
+    switch (type) {
+      case 'producer':
+        return UserType.producer;
+      case 'buyer': 
+        return UserType.buyer;
+      default:
+        throw Exception('Tipo de usuário desconhecido: $type');
+    }
   }
 }

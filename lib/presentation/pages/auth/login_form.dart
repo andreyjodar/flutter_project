@@ -27,6 +27,17 @@ class _LoginFormState extends State<LoginForm> {
 
   bool _isLoading = false;
 
+  @override
+  void initState() {
+    super.initState();
+    _clearForm();
+  }
+
+  void _clearForm() {
+    _emailController.clear();
+    _passwordController.clear();
+  }
+
   void _submitLogin() async {
     if (!_formKey.currentState!.validate()) return;
 

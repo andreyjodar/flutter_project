@@ -85,11 +85,11 @@ class _CompanyFormState extends State<CompanyForm> {
 
   void _submitCompany() async {
     if (_formKey.currentState!.validate() && _selectedProducer != null) {
-      setState(() => _isSubmitting = true); // Ativa o loading do botão
+      setState(() => _isSubmitting = true); 
 
       try {
         final company = Company(
-          id: widget.existingCompany?.id ?? Uuid().v4(),  // Usando o id da empresa existente ou criando um novo
+          id: widget.existingCompany?.id ?? Uuid().v4(), 
           name: _nameController.text.trim(),
           cnpj: Cnpj(_cnpjController.text),
           address: Address(_addressController.text),
@@ -99,9 +99,9 @@ class _CompanyFormState extends State<CompanyForm> {
         );
 
         if (isEditing) {
-          await widget.updateCompanyUseCase.call(company); // Atualiza a empresa
+          await widget.updateCompanyUseCase.call(company); 
         } else {
-          await widget.registerCompanyUseCase.call(company); // Cria uma nova empresa
+          await widget.registerCompanyUseCase.call(company); 
         }
 
         if (!mounted) return;
@@ -111,9 +111,9 @@ class _CompanyFormState extends State<CompanyForm> {
         );
 
         if (isEditing) {
-          Navigator.pop(context, company); // Atualiza a empresa
+          Navigator.pop(context, company); 
         } else {
-          Navigator.pop(context); // Cria uma nova empresa
+          Navigator.pop(context); 
         }
       } catch (e) {
         if (mounted) {
@@ -122,7 +122,7 @@ class _CompanyFormState extends State<CompanyForm> {
           );
         }
       } finally {
-        if (mounted) setState(() => _isSubmitting = false); // Desativa o loading
+        if (mounted) setState(() => _isSubmitting = false); 
       }
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -175,7 +175,7 @@ class _CompanyFormState extends State<CompanyForm> {
                     ),
                     if(widget.existingCompany == null)
                     const SizedBox(height: 16),
-                    if (widget.existingCompany == null)  // Mostrar esse campo apenas se for criação
+                    if (widget.existingCompany == null)  
                     DropdownButtonFormField<User>(
                       value: _selectedProducer,
                       items: _producers

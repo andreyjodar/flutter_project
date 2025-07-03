@@ -156,14 +156,14 @@ class _CompanyPageState extends State<CompanyPage> {
                 if (_isProducer) ...[
                   SubmitButton(
                     onPressed: () => _editCompany(context),
-                    text: 'Editar Conta',
+                    text: 'Editar Empresa',
                     backgroundColor: Colors.grey[200],
                     foregroundColor: Colors.deepPurple,
                   ),
                   const SizedBox(height: 12),
                   SubmitButton(
                     onPressed: () => _deleteCompany(context),
-                    text: 'Excluir Conta',
+                    text: 'Excluir Empresa',
                     backgroundColor: Colors.red,
                     foregroundColor: Colors.white,
                   ),

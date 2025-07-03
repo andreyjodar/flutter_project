@@ -7,6 +7,7 @@ import 'package:flutter_project/domain/usecases/get_companies_by_user_usecase.da
 import 'package:flutter_project/external/datasources/firebase/firebase_company_dao.dart';
 import 'package:flutter_project/external/datasources/firebase/firebase_user_dao.dart';
 import 'package:flutter_project/infrastructure/repositories/company_repository_impl.dart';
+import 'package:flutter_project/infrastructure/repositories/user_repository_impl.dart';
 import 'package:flutter_project/presentation/stores/logged_user_store.dart';
 import 'package:provider/provider.dart';
 import "core/firebase/firebase_options.dart";
@@ -21,8 +22,8 @@ void main() async {
     MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (_) => LoggedUserStore()),
-        Provider<GetCompaniesByUserUseCase>(create: (_) => GetCompaniesByUserUseCase(CompanyRepositoryImpl(userDao: FirebaseUserDao(FirebaseFirestore.instance), companyDao: FirebaseCompanyDao(FirebaseFirestore.instance)))),
-        Provider<GetAllCompaniesUseCase>(create: (_) => GetAllCompaniesUseCase(CompanyRepositoryImpl(userDao: FirebaseUserDao(FirebaseFirestore.instance), companyDao: FirebaseCompanyDao(FirebaseFirestore.instance))))
+        Provider<GetCompaniesByUserUseCase>(create: (_) => GetCompaniesByUserUseCase(CompanyRepositoryImpl(companyDao: FirebaseCompanyDao(FirebaseFirestore.instance), userRepository: UserRepositoryImpl(FirebaseUserDao(FirebaseFirestore.instance))))),
+        Provider<GetAllCompaniesUseCase>(create: (_) => GetAllCompaniesUseCase(CompanyRepositoryImpl(companyDao: FirebaseCompanyDao(FirebaseFirestore.instance), userRepository: UserRepositoryImpl(FirebaseUserDao(FirebaseFirestore.instance)))))
       ], 
       child: const App()
     ),

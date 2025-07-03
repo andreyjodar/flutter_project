@@ -1,29 +1,55 @@
-import 'package:flutter_project/infrastructure/models/company_dto.dart';
-import 'package:uuid/uuid.dart';
-
-class ProductDTO {
+class ProductDto {
   String id;
   String? urlImage;
   String name;
-  String description;
+  String? description;
   String type;
   String status;
-  String un;
+  String unit;
   double price;
-  CompanyDto company;
-  DateTime registerDate;
+  String companyId;
+  String registerDate;
 
-  ProductDTO({
-    String? id,
+  ProductDto({
+    required this.id,
     this.urlImage,
     required this.name,
-    required this.description,
+    this.description,
     required this.type,
     required this.status,
-    required this.un,
+    required this.unit,
     required this.price,
-    required this.company,
-    DateTime? registerDate,
-  })  : id = id ?? const Uuid().v4(),
-        registerDate = registerDate ?? DateTime.now();
+    required this.companyId,
+    required this.registerDate,
+  });
+
+  factory ProductDto.fromMap(Map<String, dynamic> map) {
+    return ProductDto(
+      id: map['id'],
+      urlImage: map['urlImage'],
+      name: map['name'],
+      description: map['description'],
+      type: map['type'],
+      status: map['status'],
+      unit: map['unit'],
+      price: map['price'],
+      companyId: map['companyId'],
+      registerDate: map['registerDate'],
+    );
+  }
+
+  Map<String, dynamic> toMap() {
+    return {
+      'id': id,
+      'urlImage': urlImage,
+      'name': name,
+      'description': description,
+      'type': type,
+      'status': status,
+      'unit': unit,
+      'price': price,
+      'companyId': companyId,
+      'registerDate': registerDate,
+    };
+  }
 }

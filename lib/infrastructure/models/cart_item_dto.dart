@@ -3,7 +3,7 @@ import 'package:uuid/uuid.dart';
 
 class CartItemDTO {
   String id;
-  ProductDTO product;
+  ProductDto product;
   int quantity;
   DateTime lastUpdate;
 

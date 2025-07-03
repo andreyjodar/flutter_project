@@ -25,6 +25,26 @@ class ProfilePage extends StatelessWidget {
   });
 
   void _deleteUser(BuildContext context, User user) async {
+    final confirm = await showDialog<bool>(
+      context: context,
+      builder: (_) => AlertDialog(
+        title: const Text('Confirmar exclusão'),
+        content: const Text('Deseja realmente excluir sua conta?'),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context, false),
+            child: const Text('Cancelar'),
+          ),
+          ElevatedButton(
+            onPressed: () => Navigator.pop(context, true),
+            child: const Text('Excluir'),
+          ),
+        ],
+      ),
+    );
+
+    if (confirm != true) return;
+
     try {
       await deleteUserUseCase(user.id);
       if (!context.mounted) return;

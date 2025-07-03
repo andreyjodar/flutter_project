@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_project/core/components/submit_button.dart';
 import 'package:flutter_project/domain/entities/company.dart';
+import 'package:flutter_project/domain/entities/user.dart';
 import 'package:flutter_project/domain/usecases/delete_company_usecase.dart';
 import 'package:flutter_project/presentation/components/info_card.dart';
 import 'package:flutter_project/core/settings/routes.dart';
+import 'package:flutter_project/presentation/stores/logged_user_store.dart';
+import 'package:provider/provider.dart';
 
 class CompanyPage extends StatefulWidget {
   final DeleteCompanyUseCase deleteCompanyUseCase;
@@ -21,11 +24,18 @@ class CompanyPage extends StatefulWidget {
 
 class _CompanyPageState extends State<CompanyPage> {
   late Company company;
+  bool _isProducer = false;
 
   @override
   void initState() {
     super.initState();
     company = widget.initialCompany;
+    
+    // Verifica se o usuário logado é do tipo producer
+    final user = Provider.of<LoggedUserStore>(context, listen: false).user;
+    if (user != null && user.type == UserType.producer) {
+      _isProducer = true;  // Habilita os botões se for produtor
+    }
   }
 
   void _editCompany(BuildContext context) {
@@ -142,19 +152,22 @@ class _CompanyPageState extends State<CompanyPage> {
                   value: company.registerDate.toIso8601String(),
                 ),
                 const SizedBox(height: 24),
-                SubmitButton(
-                  onPressed: () => _editCompany(context),
-                  text: 'Editar Conta',
-                  backgroundColor: Colors.grey[200],
-                  foregroundColor: Colors.deepPurple,
-                ),
-                const SizedBox(height: 12),
-                SubmitButton(
-                  onPressed: () => _deleteCompany(context),
-                  text: 'Excluir Conta',
-                  backgroundColor: Colors.red,
-                  foregroundColor: Colors.white,
-                ),
+                // Condicional para exibir os botões apenas se o usuário for 'producer'
+                if (_isProducer) ...[
+                  SubmitButton(
+                    onPressed: () => _editCompany(context),
+                    text: 'Editar Conta',
+                    backgroundColor: Colors.grey[200],
+                    foregroundColor: Colors.deepPurple,
+                  ),
+                  const SizedBox(height: 12),
+                  SubmitButton(
+                    onPressed: () => _deleteCompany(context),
+                    text: 'Excluir Conta',
+                    backgroundColor: Colors.red,
+                    foregroundColor: Colors.white,
+                  ),
+                ]
               ],
             ),
           ),

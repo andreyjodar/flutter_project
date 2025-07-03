@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_project/core/components/submit_button.dart';
 import 'package:flutter_project/domain/entities/company.dart';
 import 'package:flutter_project/domain/entities/user.dart';
+import 'package:flutter_project/domain/usecases/get_all_companies_usecase.dart';
 import 'package:flutter_project/domain/usecases/get_companies_by_user_usecase.dart';
 import 'package:flutter_project/presentation/stores/logged_user_store.dart';
 import 'package:flutter_project/core/settings/routes.dart';
@@ -16,49 +17,62 @@ class ShoppingPage extends StatefulWidget {
 
 class _ShoppingPageState extends State<ShoppingPage> {
   late final GetCompaniesByUserUseCase _getCompaniesByUserUseCase;
+  late final GetAllCompaniesUseCase _getAllCompaniesUseCase;
   List<Company> _companies = [];
   bool _isLoading = true;
+  bool _isProducer = false;
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
     _getCompaniesByUserUseCase = Provider.of<GetCompaniesByUserUseCase>(context);
-    _loadUserCompanies();
+    _getAllCompaniesUseCase = Provider.of<GetAllCompaniesUseCase>(context);
+    _loadCompanies();
   }
 
-  Future<void> _loadUserCompanies() async {
+  Future<void> _loadCompanies() async {
     try {
       final user = Provider.of<LoggedUserStore>(context, listen: false).user;
-      if (user == null || user.type != UserType.producer) {
+      if (user == null) {
         setState(() {
           _isLoading = false;
         });
         return; 
       }
 
-      final companies = await _getCompaniesByUserUseCase.call(user.id);
-      setState(() {
-        _companies = companies;
-        _isLoading = false;
-      });
+      if (user.type == UserType.producer) {
+        _isProducer = true;
+        final companies = await _getCompaniesByUserUseCase.call(user.id);
+        setState(() {
+          _companies = companies;
+          _isLoading = false;
+        });
+      } else {
+        _isProducer = false;
+        final companies = await _getAllCompaniesUseCase.call();  // Carrega todas as empresas para 'buyer'
+        setState(() {
+          _companies = companies;
+          _isLoading = false;
+        });
+      }
     } catch (e) {
       setState(() {
         _isLoading = false;
       });
-      if(!mounted) return;
+      if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Erro ao carregar empresas: $e')));
     }
   }
 
   void _goToCompanyDetails(Company company) {
     Navigator.pushNamed(context, Routes.company, arguments: company).then((_) {
-      _loadUserCompanies();
+      _loadCompanies();
     });
   }
 
   void _goToCreateCompany() {
     Navigator.pushNamed(context, Routes.companyForm).then((_) {
-      _loadUserCompanies(); 
+      _loadCompanies(); 
     });
   }
 
@@ -101,10 +115,10 @@ class _ShoppingPageState extends State<ShoppingPage> {
         padding: const EdgeInsets.all(16.0),
         child: SizedBox(
           width: double.infinity,
-          child: SubmitButton(
+          child: _isProducer ? SubmitButton(
             onPressed: _goToCreateCompany, 
             text: 'Criar Empresa'
-          ),
+          ) : SizedBox.shrink(),
         ),
       ),
     );

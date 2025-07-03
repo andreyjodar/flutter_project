@@ -173,6 +173,7 @@ class _CompanyFormState extends State<CompanyForm> {
                         border: OutlineInputBorder()
                       ),
                     ),
+                    if(widget.existingCompany == null)
                     const SizedBox(height: 16),
                     if (widget.existingCompany == null)  // Mostrar esse campo apenas se for criação
                     DropdownButtonFormField<User>(

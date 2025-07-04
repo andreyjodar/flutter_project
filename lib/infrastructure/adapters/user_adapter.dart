@@ -13,7 +13,7 @@ class UserAdapter {
       email: Email(dto.email),
       password: Password(dto.password),
       type: _getUserType(dto.type),
-      address: dto.address != null ? Address(dto.address!) : null,
+      address: Address(dto.address),
       registerDate: DateTime.parse(dto.registerDate),
     );
   }

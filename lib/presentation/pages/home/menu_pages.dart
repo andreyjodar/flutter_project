@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_project/core/components/appbar.dart';
+import 'package:flutter_project/presentation/components/appbar.dart';
 import 'package:flutter_project/domain/usecases/delete_user_usecase.dart';
 import 'package:flutter_project/domain/usecases/update_user_usecase.dart';
 import 'package:flutter_project/external/datasources/firebase/firebase_user_dao.dart';

@@ -4,7 +4,7 @@ class UserDto {
   final String email;
   final String password;
   final String type;
-  final String? address;
+  final String address;
   final String registerDate;
 
   UserDto({
@@ -13,7 +13,7 @@ class UserDto {
     required this.email,
     required this.password,
     required this.type,
-    this.address,
+    required this.address,
     required this.registerDate,
   });
   

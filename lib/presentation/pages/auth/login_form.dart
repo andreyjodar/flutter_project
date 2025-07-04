@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_project/core/components/appbar.dart';
-import 'package:flutter_project/core/components/submit_button.dart';
+import 'package:flutter_project/presentation/components/appbar.dart';
+import 'package:flutter_project/presentation/components/submit_button.dart';
 import 'package:flutter_project/core/settings/routes.dart';
 import 'package:flutter_project/domain/usecases/login_user_usecase.dart';
 import 'package:flutter_project/presentation/stores/logged_user_store.dart';

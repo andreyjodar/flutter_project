@@ -1,7 +1,7 @@
 // presentation/pages/profile/profile_page.dart
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_project/core/components/submit_button.dart';
+import 'package:flutter_project/presentation/components/submit_button.dart';
 import 'package:flutter_project/core/settings/routes.dart';
 import 'package:flutter_project/domain/entities/user.dart';
 import 'package:flutter_project/domain/usecases/delete_user_usecase.dart';
@@ -126,12 +126,11 @@ class ProfilePage extends StatelessWidget {
                 ),
                 const SizedBox(height: 8),
 
-                if (user.address != null)
-                  InfoCard(
-                    icon: Icons.location_on_outlined,
-                    label: 'Endereço',
-                    value: user.address!,
-                  ),
+                InfoCard(
+                  icon: Icons.location_on_outlined,
+                  label: 'Endereço',
+                  value: user.address,
+                ),
                 const SizedBox(height: 8),
 
                 InfoCard(

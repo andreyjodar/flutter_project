@@ -10,56 +10,67 @@ class FirebaseCompanyDao implements CompanyDaoInterface {
 
   @override
   Future<void> create(CompanyDto companyDto) async {
-    await _firestore.collection(_collection).doc(companyDto.id).set(companyDto.toMap());
+    await _firestore
+      .collection(_collection)
+      .doc(companyDto.id)
+      .set(companyDto.toMap());
   }
 
   @override
   Future<void> delete(String companyId) async {
-    await _firestore.collection(_collection).doc(companyId).delete();
+    await _firestore
+      .collection(_collection)
+      .doc(companyId)
+      .delete();
   }
 
   @override
   Future<void> update(CompanyDto companyDto) async {
-    await _firestore.collection(_collection).doc(companyDto.id).update(companyDto.toMap());
+    await _firestore
+      .collection(_collection)
+      .doc(companyDto.id)
+      .update(companyDto.toMap());
   }
 
   @override
   Future<CompanyDto?> getById(String id) async {
-    final doc = await _firestore.collection(_collection).doc(id).get();
-    if (!doc.exists) return null;
-    return CompanyDto.fromMap(doc.data()!);
+    final doc = await _firestore
+      .collection(_collection)
+      .doc(id)
+      .get();
+    if (doc.exists && doc.data() != null) {
+      return CompanyDto.fromMap(doc.data()!);
+    } 
+    return null;
   }
 
 @override
 Future<CompanyDto?> getByCnpj(String cnpj) async {
-  final querySnapshot = await _firestore
+  final query = await _firestore
       .collection(_collection)
       .where('cnpj', isEqualTo: cnpj)
       .limit(1) 
       .get();
-
-  if (querySnapshot.docs.isEmpty) return null;
-
-  return CompanyDto.fromMap(querySnapshot.docs.first.data());
+  if (query.docs.isNotEmpty) {
+    return CompanyDto.fromMap(query.docs.first.data());
+  } 
+  return null;
 }
 
   @override
   Future<List<CompanyDto>> getAll() async {
-    final querySnapshot = await _firestore.collection(_collection).get();
-    return querySnapshot.docs
-        .map((doc) => CompanyDto.fromMap(doc.data()))
-        .toList();
+    final query = await _firestore
+      .collection(_collection)
+      .get();
+    return query.docs.map((doc) => CompanyDto.fromMap(doc.data())).toList();
   }
 
   @override
   Future<List<CompanyDto>> getByUser(String userId) async {
-    final querySnapshot = await _firestore
+    final query = await _firestore
         .collection(_collection)
         .where('producerId', isEqualTo: userId)
         .get();
-
-    return querySnapshot.docs
-        .map((doc) => CompanyDto.fromMap(doc.data()))
-        .toList();
+    return query.docs.map((doc) => CompanyDto.fromMap(doc.data())).toList();
   }
 }

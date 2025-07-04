@@ -19,7 +19,7 @@ class User {
     required Email email, 
     required Password password, 
     required UserType type,
-    Address? address,
+    required Address address,
     DateTime? registerDate
   }) : _id = id, 
        _name = name,
@@ -34,7 +34,7 @@ class User {
   String get email => _email.toString();
   String get password => _password.toString(); // Ainda quero mudar isso!
   UserType get type => _type;
-  String? get address => _address.toString();
+  String get address => _address.toString();
   DateTime get registerDate => _registerDate;
 
   void changePassword(Password password) {

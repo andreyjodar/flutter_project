@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_project/domain/usecases/update_user_usecase.dart';
 import 'package:provider/provider.dart';
-import 'package:flutter_project/core/components/appbar.dart';
-import 'package:flutter_project/core/components/submit_button.dart';
+import 'package:flutter_project/presentation/components/appbar.dart';
+import 'package:flutter_project/presentation/components/submit_button.dart';
 import 'package:flutter_project/core/settings/routes.dart';
 import 'package:flutter_project/presentation/stores/logged_user_store.dart';
 import 'package:flutter_project/presentation/validators/address_validator.dart';

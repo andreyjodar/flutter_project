@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_project/core/components/submit_button.dart';
+import 'package:flutter_project/presentation/components/submit_button.dart';
 import 'package:flutter_project/domain/entities/company.dart';
 import 'package:flutter_project/domain/entities/user.dart';
 import 'package:flutter_project/domain/usecases/get_all_companies_usecase.dart';

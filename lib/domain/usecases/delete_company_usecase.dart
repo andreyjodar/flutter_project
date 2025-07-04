@@ -1,6 +1,5 @@
 import 'package:flutter_project/domain/repositories/company_repository_interface.dart';
 
-
 class DeleteCompanyUseCase {
   final CompanyRepositoryInterface _repository;
 

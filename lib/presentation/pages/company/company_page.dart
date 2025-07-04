@@ -38,6 +38,14 @@ class _CompanyPageState extends State<CompanyPage> {
     }
   }
 
+  void _productsDetails(BuildContext context) {
+    Navigator.pushNamed(
+      context, 
+      Routes.companyProducts,
+      arguments: company,
+    );
+  }
+
   void _editCompany(BuildContext context) {
     Navigator.pushNamed(
       context,
@@ -153,7 +161,14 @@ class _CompanyPageState extends State<CompanyPage> {
                 ),
                 const SizedBox(height: 24),
                 // Condicional para exibir os botões apenas se o usuário for 'producer'
+                SubmitButton(
+                  onPressed: () => _productsDetails(context), 
+                  text: 'Consultar Produtos',
+                  backgroundColor: Colors.grey[200],
+                  foregroundColor: Colors.blue,
+                ),
                 if (_isProducer) ...[
+                  const SizedBox(height: 12),
                   SubmitButton(
                     onPressed: () => _editCompany(context),
                     text: 'Editar Empresa',

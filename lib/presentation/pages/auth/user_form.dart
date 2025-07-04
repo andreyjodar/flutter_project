@@ -46,6 +46,15 @@ class _UserFormState extends State<UserForm> {
   bool _isLoading = false;
   bool get isEditing => widget.existingUser != null;
 
+  String  _getUserType(UserType type) {
+    switch (type) {
+      case UserType.buyer:
+        return 'buyer';
+      case UserType.producer:
+        return 'producer';
+    }
+  }
+
   @override
   void initState() {
     super.initState();
@@ -53,8 +62,8 @@ class _UserFormState extends State<UserForm> {
     if (isEditing) {
       final user = widget.existingUser!;
       _nameController.text = user.name;
-      _addressController.text = user.address ?? '';
-      _userType = user.type == UserType.producer ? 'producer' : 'buyer';
+      _addressController.text = user.address;
+      _userType = _getUserType(user.type);
       _emailController.text = user.email;
     }
   }

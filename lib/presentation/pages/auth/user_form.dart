@@ -37,7 +37,7 @@ class _UserFormState extends State<UserForm> {
   final _nameController = TextEditingController();
   final _passwordController = TextEditingController();
   final _addressController = TextEditingController();
-  String? _userType;
+  UserType? _userType;
 
   final _emailValidator = EmailValidator();
   final _passwordValidator = PasswordValidator();
@@ -45,15 +45,6 @@ class _UserFormState extends State<UserForm> {
 
   bool _isLoading = false;
   bool get isEditing => widget.existingUser != null;
-
-  String  _getUserType(UserType type) {
-    switch (type) {
-      case UserType.buyer:
-        return 'buyer';
-      case UserType.producer:
-        return 'producer';
-    }
-  }
 
   @override
   void initState() {
@@ -63,7 +54,7 @@ class _UserFormState extends State<UserForm> {
       final user = widget.existingUser!;
       _nameController.text = user.name;
       _addressController.text = user.address;
-      _userType = _getUserType(user.type);
+      _userType = user.type;
       _emailController.text = user.email;
     }
   }
@@ -79,7 +70,7 @@ class _UserFormState extends State<UserForm> {
         name: _nameController.text.trim(),
         email: Email(_emailController.text),
         password: Password(_passwordController.text),
-        type: _userType == 'producer' ? UserType.producer : UserType.buyer,
+        type: _userType!,
         address: Address(_addressController.text.trim()),
         registerDate: isEditing ? widget.existingUser!.registerDate : null,
       );
@@ -167,15 +158,15 @@ class _UserFormState extends State<UserForm> {
                         validator: _passwordValidator.validate,
                       ),
                       const SizedBox(height: 16),
-                      DropdownButtonFormField<String>(
+                      DropdownButtonFormField<UserType>(
                         value: _userType,
                         decoration: const InputDecoration(
                           labelText: 'Tipo de Usuário',
                           border: OutlineInputBorder(),
                         ),
                         items: const [
-                          DropdownMenuItem(value: 'buyer', child: Text('Comprador')),
-                          DropdownMenuItem(value: 'producer', child: Text('Produtor')),
+                          DropdownMenuItem(value: UserType.buyer, child: Text('Comprador')),
+                          DropdownMenuItem(value: UserType.producer, child: Text('Produtor')),
                         ],
                         onChanged: (value) => setState(() => _userType = value),
                         validator: (value) =>

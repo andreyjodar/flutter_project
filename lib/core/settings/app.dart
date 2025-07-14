@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_project/domain/entities/company.dart';
 import 'package:flutter_project/domain/entities/product.dart';
 import 'package:flutter_project/domain/usecases/delete_company_usecase.dart';
-import 'package:flutter_project/domain/usecases/get_producers_usecase.dart';
+import 'package:flutter_project/domain/usecases/delete_product_usecase.dart';
 import 'package:flutter_project/domain/usecases/register_company_usecase.dart';
 import 'package:flutter_project/domain/usecases/register_product_usecase.dart';
 import 'package:flutter_project/domain/usecases/update_company_usecase.dart';
@@ -44,7 +44,7 @@ class App extends StatelessWidget {
         Routes.company: (context) => CompanyPage(initialCompany: ModalRoute.of(context)?.settings.arguments as Company, deleteCompanyUseCase: DeleteCompanyUseCase(CompanyRepositoryImpl(companyDao: FirebaseCompanyDao(FirebaseFirestore.instance), userRepository: UserRepositoryImpl(FirebaseUserDao(FirebaseFirestore.instance))))),
         Routes.companyForm: (context) => CompanyForm(existingCompany: ModalRoute.of(context)?.settings.arguments as Company?, registerCompanyUseCase: RegisterCompanyUseCase(CompanyRepositoryImpl(companyDao: FirebaseCompanyDao(FirebaseFirestore.instance), userRepository: UserRepositoryImpl(FirebaseUserDao(FirebaseFirestore.instance)))), updateCompanyUseCase: UpdateCompanyUseCase(CompanyRepositoryImpl(companyDao: FirebaseCompanyDao(FirebaseFirestore.instance), userRepository: UserRepositoryImpl(FirebaseUserDao(FirebaseFirestore.instance))))),
         Routes.companyProducts: (context) => CompanyProductsPage(existingCompany: ModalRoute.of(context)?.settings.arguments as Company),
-        Routes.product: (context) => ProductPage(),
+        Routes.product: (context) => ProductPage(initialProduct: ModalRoute.of(context)?.settings.arguments as Product, deleteProductUseCase: DeleteProductUseCase(ProductRepositoryImpl(productDao: FirebaseProductDao(FirebaseFirestore.instance), companyRepository: CompanyRepositoryImpl(companyDao: FirebaseCompanyDao(FirebaseFirestore.instance), userRepository: UserRepositoryImpl(FirebaseUserDao(FirebaseFirestore.instance))))),),
         Routes.productForm: (context) {
           final args = ModalRoute.of(context)?.settings.arguments as ProductFormArgs;
           return  ProductForm(currentCompany: args.company, existingProduct: args.product, registerProductUseCase: RegisterProductUseCase(ProductRepositoryImpl(productDao: FirebaseProductDao(FirebaseFirestore.instance), companyRepository: CompanyRepositoryImpl(companyDao: FirebaseCompanyDao(FirebaseFirestore.instance), userRepository: UserRepositoryImpl(FirebaseUserDao(FirebaseFirestore.instance))))), updateProductUseCase: UpdateProductUseCase(ProductRepositoryImpl(productDao: FirebaseProductDao(FirebaseFirestore.instance), companyRepository: CompanyRepositoryImpl(companyDao: FirebaseCompanyDao(FirebaseFirestore.instance), userRepository: UserRepositoryImpl(FirebaseUserDao(FirebaseFirestore.instance))))));

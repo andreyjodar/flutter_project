@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_project/presentation/components/appbar.dart';
 import 'package:flutter_project/presentation/components/submit_button.dart';
 import 'package:flutter_project/domain/entities/company.dart';
 import 'package:flutter_project/domain/entities/user.dart';
@@ -31,10 +32,9 @@ class _CompanyPageState extends State<CompanyPage> {
     super.initState();
     company = widget.initialCompany;
     
-    // Verifica se o usuário logado é do tipo producer
     final user = Provider.of<LoggedUserStore>(context, listen: false).user;
     if (user != null && user.type == UserType.producer) {
-      _isProducer = true;  // Habilita os botões se for produtor
+      _isProducer = true;
     }
   }
 
@@ -87,7 +87,7 @@ class _CompanyPageState extends State<CompanyPage> {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Empresa excluída com sucesso.')),
       );
-      Navigator.pop(context, true); // Retorna para ShoppingPage com sinal de alteração
+      Navigator.pop(context, true); 
     } catch (e) {
       if (!context.mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
@@ -99,7 +99,7 @@ class _CompanyPageState extends State<CompanyPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text(company.name)),
+      appBar: CustomAppBar(title: company.name, showAuthActions: false),
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.all(16.0),
@@ -160,7 +160,6 @@ class _CompanyPageState extends State<CompanyPage> {
                   value: company.registerDate.toIso8601String(),
                 ),
                 const SizedBox(height: 24),
-                // Condicional para exibir os botões apenas se o usuário for 'producer'
                 SubmitButton(
                   onPressed: () => _productsDetails(context), 
                   text: 'Consultar Produtos',

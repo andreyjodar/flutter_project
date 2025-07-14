@@ -3,6 +3,7 @@ import 'package:flutter_project/domain/entities/company.dart';
 import 'package:flutter_project/domain/entities/product.dart';
 import 'package:flutter_project/domain/usecases/register_product_usecase.dart';
 import 'package:flutter_project/domain/usecases/update_product_usecase.dart';
+import 'package:flutter_project/presentation/components/appbar.dart';
 import 'package:flutter_project/presentation/components/submit_button.dart';
 import 'package:flutter_project/presentation/validators/decimal_validator.dart';
 import 'package:uuid/uuid.dart';
@@ -28,6 +29,7 @@ class ProductForm extends StatefulWidget {
 class _ProductFormState extends State<ProductForm> {
   final _formKey = GlobalKey<FormState>();
   final _nameController = TextEditingController();
+  final _urlImageController = TextEditingController();
   final _descriptionController = TextEditingController();
   final _priceController = TextEditingController();
 
@@ -52,8 +54,6 @@ class _ProductFormState extends State<ProductForm> {
       _productType = product.type;
       _productStatus = product.status;
       _productUnit = product.unit;
-    } else {
-      _productStatus = ProductStatus.available; // valor padrão
     }
   }
 
@@ -66,8 +66,9 @@ class _ProductFormState extends State<ProductForm> {
       final product = Product(
         id: isEditing ? widget.existingProduct!.id : const Uuid().v4(),
         name: _nameController.text.trim(),
+        urlImage: _urlImageController.text.trim().isEmpty ? null : _urlImageController.text.trim(),
         description: _descriptionController.text.trim().isEmpty ? null : _descriptionController.text.trim(),
-        type: _productType!, // só pode ser null em modo criação
+        type: _productType!, 
         unit: _productUnit!,
         status: _productStatus!,
         price: double.parse(_priceController.text.replaceAll(',', '.')),
@@ -101,9 +102,7 @@ class _ProductFormState extends State<ProductForm> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(isEditing ? 'Editar Produto' : 'Novo Produto'),
-      ),
+      appBar: CustomAppBar(title: isEditing ? 'Editar Produto' : 'Novo Produto', showAuthActions: false),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Form(
@@ -126,6 +125,15 @@ class _ProductFormState extends State<ProductForm> {
                 ),
                 const SizedBox(height: 16),
 
+                TextFormField(
+                  controller: _urlImageController,
+                  decoration: const InputDecoration(
+                    labelText: 'URL Imagem',
+                    border: OutlineInputBorder(),
+                  ),
+                ),
+                const SizedBox(height: 16),
+
                 if (!isEditing) ...[
                   DropdownButtonFormField<ProductType>(
                     value: _productType,
@@ -133,12 +141,12 @@ class _ProductFormState extends State<ProductForm> {
                       labelText: 'Tipo de Produto',
                       border: OutlineInputBorder(),
                     ),
-                    items: ProductType.values
-                        .map((type) => DropdownMenuItem(
-                              value: type,
-                              child: Text(type.name),
-                            ))
-                        .toList(),
+                    items: const [
+                      DropdownMenuItem(value: ProductType.grain, child: Text('Grãos')),
+                      DropdownMenuItem(value: ProductType.vegetable, child: Text('Vegetais')),
+                      DropdownMenuItem(value: ProductType.fruit, child: Text('Frutas')),
+                      DropdownMenuItem(value: ProductType.tuber, child: Text('Tubéculos')),
+                    ],
                     onChanged: (value) => setState(() => _productType = value),
                     validator: (value) {
                       if (value == null) return 'Selecione um tipo';
@@ -154,33 +162,17 @@ class _ProductFormState extends State<ProductForm> {
                     labelText: 'Unidade de Medida',
                     border: OutlineInputBorder(),
                   ),
-                  items: ProductUnit.values
-                      .map((unit) => DropdownMenuItem(
-                            value: unit,
-                            child: Text(unit.name),
-                          ))
-                      .toList(),
+                  items: const [
+                    DropdownMenuItem(value: ProductUnit.kilogram, child: Text('Kilograma (KG)')),
+                    DropdownMenuItem(value: ProductUnit.milliliters, child: Text('Mililitros (ML)')),
+                    DropdownMenuItem(value: ProductUnit.unit, child: Text('Unidade (UN)')),
+                    DropdownMenuItem(value: ProductUnit.pack, child: Text('Bandeja (BDJ)'))
+                  ],
                   onChanged: (value) => setState(() => _productUnit = value),
                   validator: (value) {
                     if (value == null) return 'Selecione uma unidade';
                     return null;
                   },
-                ),
-                const SizedBox(height: 16),
-
-                DropdownButtonFormField<ProductStatus>(
-                  value: _productStatus,
-                  decoration: const InputDecoration(
-                    labelText: 'Status',
-                    border: OutlineInputBorder(),
-                  ),
-                  items: ProductStatus.values
-                      .map((status) => DropdownMenuItem(
-                            value: status,
-                            child: Text(status.name),
-                          ))
-                      .toList(),
-                  onChanged: (value) => setState(() => _productStatus = value),
                 ),
                 const SizedBox(height: 16),
 
@@ -195,13 +187,29 @@ class _ProductFormState extends State<ProductForm> {
                 ),
                 const SizedBox(height: 16),
 
+                SwitchListTile(
+                  title: const Text('Disponível'),
+                  subtitle: Text(_productStatus == ProductStatus.available 
+                      ? 'Produto disponível para venda' 
+                      : 'Produto indisponível'),
+                  value: _productStatus == ProductStatus.available,
+                  activeColor: Colors.green,
+                  onChanged: (value) {
+                    setState(() {
+                      _productStatus = value 
+                          ? ProductStatus.available 
+                          : ProductStatus.unavailable;
+                    });
+                  },
+                ),
+                const SizedBox(height: 16),
+
                 TextFormField(
                   controller: _descriptionController,
                   decoration: const InputDecoration(
                     labelText: 'Descrição',
                     border: OutlineInputBorder(),
                   ),
-                  maxLines: 3,
                 ),
                 const SizedBox(height: 24),
 

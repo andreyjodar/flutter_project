@@ -82,6 +82,10 @@ class Product {
   bool isTuber() => _type == ProductType.tuber;
   bool isGrain() => _type == ProductType.grain;
   bool isFruit() => _type == ProductType.fruit;
+  bool isKilogram() => _unit == ProductUnit.kilogram;
+  bool isMililliters() => _unit == ProductUnit.milliliters;
+  bool isPack() => _unit == ProductUnit.pack;
+  bool isUnit() => _unit == ProductUnit.unit;
   bool isAvailable() => _status == ProductStatus.available;
   bool isUnavailable() => _status == ProductStatus.unavailable;
 }

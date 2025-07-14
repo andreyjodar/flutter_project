@@ -5,6 +5,7 @@ import 'package:flutter_project/domain/entities/product.dart';
 import 'package:flutter_project/domain/usecases/get_products_by_company_usecase.dart';
 import 'package:flutter_project/presentation/components/appbar.dart';
 import 'package:flutter_project/presentation/components/submit_button.dart';
+import 'package:flutter_project/presentation/pages/product/product_form_args.dart';
 import 'package:flutter_project/presentation/stores/logged_user_store.dart';
 import 'package:provider/provider.dart';
 
@@ -61,7 +62,7 @@ class _CompanyProductsPage extends State<CompanyProductsPage> {
   }
 
   void _goToCreateProduct() {
-    Navigator.pushNamed(context, Routes.productForm, arguments: widget.existingCompany).then((_) => _loadProducts());
+    Navigator.pushNamed(context, Routes.productForm, arguments: ProductFormArgs(company: widget.existingCompany),).then((_) => _loadProducts());
   }
 
   void _goToProductDetails(Product product) {

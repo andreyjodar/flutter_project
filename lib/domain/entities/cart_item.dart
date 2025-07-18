@@ -1,31 +1,44 @@
 import 'package:flutter_project/domain/entities/product.dart';
 
 class CartItem {
-  final String id;
-  final Product product;
+  final String _id;
+  final Product _product;
   int _quantity;
   DateTime _lastUpdate;
 
   CartItem({
-    required this.id,
-    required this.product,
+    required String id,
+    required Product product,
     required int quantity,
     DateTime? lastUpdate,
-  })  : _quantity = quantity,
+  })  : _id = id,
+        _product = product,
+        _quantity = quantity,
         _lastUpdate = lastUpdate ?? DateTime.now() {
     if (quantity <= 0) {
-      throw Exception('Quantidade inválida');
+      throw Exception('Quantidade não pode ser menor que 1');
     }
   }
 
+  String get id => _id;
+  Product get product => _product;
   int get quantity => _quantity;
   DateTime get lastUpdate => _lastUpdate;
 
+  void incrementQuantity() {
+    _quantity += 1;
+  }
+
+  void decrementQuantity() {
+    if(_quantity == 1) throw Exception('Quantidade não pode ser menor que 1');
+    _quantity -= 1;
+  }
+
   void updateQuantity(int quantity) {
-    if (quantity <= 0) throw Exception('Quantidade inválida');
+    if (quantity <= 0) throw Exception('Quantidade não pode ser menor que 1');
     _quantity = quantity;
     _lastUpdate = DateTime.now();
   }
 
-  double calculatePrice() => product.price * _quantity;
+  double calculatePrice() => _product.price * _quantity;
 }

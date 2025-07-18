@@ -3,7 +3,7 @@ import 'package:uuid/uuid.dart';
 
 class PurchaseDTO {
   String id;
-  CartDTO cart;
+  CartDto cart;
   String status;
   double price;
   DateTime purchaseDate;

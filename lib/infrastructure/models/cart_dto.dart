@@ -1,18 +1,34 @@
 import 'package:flutter_project/infrastructure/models/cart_item_dto.dart';
-import 'package:flutter_project/infrastructure/models/user_dto.dart';
-import 'package:uuid/uuid.dart';
 
-class CartDTO {
+class CartDto {
   String id;
-  UserDto buyer;
-  List<CartItemDTO> cartItems;
-  DateTime lastUpdate;
+  String buyerId;
+  List<CartItemDto> cartItems;
+  String lastUpdate;
 
-  CartDTO({
-    String? id,
-    required this.buyer,
+  CartDto({
+    required this.id,
+    required this.buyerId,
     required this.cartItems,
-    DateTime? lastUpdate
-  }) : id = id ?? Uuid().v4(), 
-       lastUpdate = lastUpdate ?? DateTime.now();
+    required this.lastUpdate
+  });
+
+  factory CartDto.fromMap(Map<String, dynamic> map) {
+    return CartDto(
+      id: map['id'], 
+      buyerId: map['buyerId'], 
+      cartItems: (map['cartItems'] as List<dynamic>)
+        .map((item) => CartItemDto.fromMap(item as Map<String, dynamic>)).toList(),
+      lastUpdate: map['lastUpdate']
+    );
+  }
+
+  Map<String, dynamic> toMap() {
+    return {
+      'id': id,
+      'buyerId': buyerId,
+      'cartItems': cartItems.map((item) => item.toMap()).toList(),
+      'lastUpdate': lastUpdate
+    };
+  }
 }

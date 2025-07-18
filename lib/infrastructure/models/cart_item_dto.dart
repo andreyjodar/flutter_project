@@ -1,17 +1,31 @@
-import 'package:flutter_project/infrastructure/models/product_dto.dart';
-import 'package:uuid/uuid.dart';
-
-class CartItemDTO {
+class CartItemDto {
   String id;
-  ProductDto product;
+  String productId;
   int quantity;
-  DateTime lastUpdate;
+  String lastUpdate;
 
-  CartItemDTO({
-    String? id, 
-    required this.product,
+  CartItemDto({
+    required this.id, 
+    required this.productId,
     required this.quantity,
-    DateTime? lastUpdate
-  }) : id = id ?? Uuid().v4(),
-       lastUpdate = lastUpdate ?? DateTime.now();
+    required this.lastUpdate
+  });
+
+  factory CartItemDto.fromMap(Map<String, dynamic> map) {
+    return CartItemDto(
+      id: map['id'], 
+      productId: map['productId'], 
+      quantity: map['quantity'], 
+      lastUpdate: map['lastUpdate']
+    );
+  }
+
+  Map<String, dynamic> toMap() {
+    return {
+      'id': id,
+      'productId': productId,
+      'quantity': quantity,
+      'lastUpdate': lastUpdate,
+    };
+  }
 }

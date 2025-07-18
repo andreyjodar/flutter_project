@@ -67,8 +67,8 @@ class CompanyRepositoryImpl extends CompanyRepositoryInterface {
 
   @override
   Future<void> updateCompany(Company company) async {
-    final dto = CompanyAdapter.toDto(company);
-    await companyDao.update(dto);
+    final companyDto = CompanyAdapter.toDto(company);
+    await companyDao.update(companyDto);
   }
 
   Future<User> _getProducer(String userId) async {

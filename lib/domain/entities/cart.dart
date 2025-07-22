@@ -25,7 +25,7 @@ class Cart {
   }
 
   String get id => _id;
-  User? get buyer => _buyer;
+  User get buyer => _buyer;
   List<CartItem> get cartItems => List.unmodifiable(_cartItems);
   bool get isActive => _isActive;
   DateTime get lastUpdate => _lastUpdate;
@@ -33,6 +33,15 @@ class Cart {
 
   double _calculateTotalPrice() {
     return _cartItems.fold(0, (sum, item) => sum + item.calculatePrice());
+  }
+
+  void updateItem(String itemId, int quantity) {
+    final item = _cartItems.firstWhere(
+      (i) => i.id == itemId,
+      orElse: () => throw Exception('Item $itemId not found in the cart'),
+    );
+    item.updateQuantity(quantity);
+    _updateDate();
   }
 
   void inactiveCart() {
@@ -48,7 +57,7 @@ class Cart {
   void addItem(CartItem item) {
     for (var i = 0; i < _cartItems.length; i++) {
       if(item.product.id == _cartItems[i].product.id) {
-        _cartItems[i].incrementQuantity();
+        _cartItems[i].incrementQuantity(item.quantity);
         _updateDate();
         return;
       }

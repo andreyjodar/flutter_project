@@ -25,13 +25,8 @@ class CartItem {
   int get quantity => _quantity;
   DateTime get lastUpdate => _lastUpdate;
 
-  void incrementQuantity() {
-    _quantity += 1;
-  }
-
-  void decrementQuantity() {
-    if(_quantity == 1) throw Exception('Quantidade não pode ser menor que 1');
-    _quantity -= 1;
+  void incrementQuantity(int quantity) {
+    _quantity += quantity;
   }
 
   void updateQuantity(int quantity) {

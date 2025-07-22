@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_project/core/settings/routes.dart';
+import 'package:flutter_project/domain/entities/cart_item.dart';
 import 'package:flutter_project/domain/entities/product.dart';
 import 'package:flutter_project/domain/entities/user.dart';
 import 'package:flutter_project/domain/usecases/delete_product_usecase.dart';
@@ -7,8 +8,10 @@ import 'package:flutter_project/presentation/components/appbar.dart';
 import 'package:flutter_project/presentation/components/info_card.dart';
 import 'package:flutter_project/presentation/components/submit_button.dart';
 import 'package:flutter_project/presentation/pages/product/product_form_args.dart';
+import 'package:flutter_project/presentation/stores/cart_notifier.dart';
 import 'package:flutter_project/presentation/stores/logged_user_store.dart';
 import 'package:provider/provider.dart';
+import 'package:uuid/uuid.dart';
 
 class ProductPage extends StatefulWidget {
   final DeleteProductUseCase deleteProductUseCase;
@@ -90,6 +93,63 @@ class _ProductPageState extends State<ProductPage> {
         });
       }
     });
+  }
+
+  void _showAddToCartDialog(BuildContext context) {
+    final controller = TextEditingController(text: '1');
+
+    showDialog(
+      context: context,
+      builder: (_) => AlertDialog(
+        title: Text('Adicionar ao Carrinho'),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(product.name, style: TextStyle(fontWeight: FontWeight.bold)),
+            SizedBox(height: 12),
+            TextField(
+              controller: controller,
+              keyboardType: TextInputType.number,
+              decoration: InputDecoration(
+                labelText: 'Quantidade',
+                border: OutlineInputBorder(),
+              ),
+            ),
+          ],
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(),
+            child: Text('Cancelar'),
+          ),
+          ElevatedButton(
+            onPressed: () {
+              final quantity = int.tryParse(controller.text);
+              if (quantity == null || quantity <= 0) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(content: Text('Quantidade inválida.')),
+                );
+                return;
+              }
+
+              final cartItem = CartItem(
+                id: Uuid().v4(),
+                product: product,
+                quantity: quantity,
+              );
+
+              context.read<CartNotifier>().addItem(cartItem);
+              Navigator.of(context).pop();
+
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(content: Text('Produto adicionado ao carrinho!')),
+              );
+            },
+            child: Text('Adicionar'),
+          ),
+        ],
+      ),
+    );
   }
 
   @override
@@ -175,8 +235,8 @@ class _ProductPageState extends State<ProductPage> {
                   label: 'Data de Cadastro', 
                   value: product.registerDate.toIso8601String()
                 ),
+                const SizedBox(height: 24),
                 if (_isProducer) ...[
-                  const SizedBox(height: 24),
                   SubmitButton(
                     onPressed: () => _editProduct(context),
                     text: 'Editar Produto',
@@ -190,6 +250,14 @@ class _ProductPageState extends State<ProductPage> {
                     backgroundColor: Colors.red,
                     foregroundColor: Colors.white,
                   ),
+                ],
+                if(!_isProducer) ...[
+                  SubmitButton(
+                    onPressed: () => _showAddToCartDialog(context), 
+                    text: 'Adicionar ao Carrinho',
+                    backgroundColor: Colors.green,
+                    foregroundColor: Colors.white,
+                  )
                 ]
               ],
             ),

@@ -8,4 +8,5 @@ class Routes {
   static const company = '/company'; // página da empresa 
   static const companyForm = '/company-form'; // formulário de empresas
   static const purchaseForm = '/purchase-form'; // formulário de compra 
+  static const myCart = '/my-cart';
 }

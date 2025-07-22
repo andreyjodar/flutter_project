@@ -21,6 +21,7 @@ import 'package:flutter_project/presentation/pages/company/company_form.dart';
 import 'package:flutter_project/presentation/pages/auth/login_form.dart';
 import 'package:flutter_project/presentation/pages/auth/user_form.dart';
 import 'package:flutter_project/presentation/pages/home/menu_pages.dart';
+import 'package:flutter_project/presentation/pages/cart/my_cart_page.dart';
 import 'package:flutter_project/presentation/pages/product/company_products_page.dart';
 import 'package:flutter_project/presentation/pages/product/product_form.dart';
 import 'package:flutter_project/presentation/pages/product/product_form_args.dart';
@@ -48,7 +49,8 @@ class App extends StatelessWidget {
         Routes.productForm: (context) {
           final args = ModalRoute.of(context)?.settings.arguments as ProductFormArgs;
           return  ProductForm(currentCompany: args.company, existingProduct: args.product, registerProductUseCase: RegisterProductUseCase(ProductRepositoryImpl(productDao: FirebaseProductDao(FirebaseFirestore.instance), companyRepository: CompanyRepositoryImpl(companyDao: FirebaseCompanyDao(FirebaseFirestore.instance), userRepository: UserRepositoryImpl(FirebaseUserDao(FirebaseFirestore.instance))))), updateProductUseCase: UpdateProductUseCase(ProductRepositoryImpl(productDao: FirebaseProductDao(FirebaseFirestore.instance), companyRepository: CompanyRepositoryImpl(companyDao: FirebaseCompanyDao(FirebaseFirestore.instance), userRepository: UserRepositoryImpl(FirebaseUserDao(FirebaseFirestore.instance))))));
-        }
+        },
+        Routes.myCart: (context) => MyCartPage()
         // Routes.purchaseForm: (context) => PurchaseForm(),
       }
     );

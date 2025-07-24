@@ -30,6 +30,15 @@ class _MyCartPageState extends State<MyCartPage> {
     });
   }
 
+  void _finalizePurchase(BuildContext context, CartNotifier cartNotifier) {
+    cartNotifier.inactiveCart();
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(content: Text('Desativar carrinho e puxar formulário (a definir)'))
+    );
+    // logica para preencher um formulário (a definir)
+    Navigator.of(context).pop();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Consumer<CartNotifier>(
@@ -64,13 +73,13 @@ class _MyCartPageState extends State<MyCartPage> {
                           mainAxisSize: MainAxisSize.min,
                           children: [
                             IconButton(
-                              icon: const Icon(Icons.edit),
+                              icon: const Icon(Icons.mode_edit_outline_outlined, color: Colors.amber),
                               onPressed: () {
                                 _showEditDialog(context, cartNotifier, item);
                                 },
                               ),
                               IconButton(
-                                icon: const Icon(Icons.delete),
+                                icon: const Icon(Icons.remove_circle_outline_outlined, color: Colors.red,),
                                 onPressed: () {
                                   cartNotifier.removeItem(item.id);
                                 },
@@ -109,7 +118,7 @@ class _MyCartPageState extends State<MyCartPage> {
                 ),
                 const SizedBox(height: 16),
                 SubmitButton(
-                  onPressed: () {},
+                  onPressed: () => _finalizePurchase(context, cartNotifier),
                   text: 'Finalizar Compra',
                   backgroundColor: Colors.green,
                   foregroundColor: Colors.white,

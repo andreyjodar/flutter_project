@@ -49,6 +49,13 @@ class CartNotifier extends ChangeNotifier {
     notifyListeners();
   }
 
+  Future<void> inactiveCart() async {
+    if(_cart != null) {
+      _cart!.inactiveCart();
+      await updateCartUseCase(_cart!);
+    }
+  }
+
   Future<void> addItem(CartItem item) async {
     if (_cart == null) {
       loadCart();

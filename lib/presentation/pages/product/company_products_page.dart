@@ -4,6 +4,7 @@ import 'package:flutter_project/domain/entities/company.dart';
 import 'package:flutter_project/domain/entities/product.dart';
 import 'package:flutter_project/domain/usecases/get_products_by_company_usecase.dart';
 import 'package:flutter_project/presentation/components/appbar.dart';
+import 'package:flutter_project/presentation/components/floating_button.dart';
 import 'package:flutter_project/presentation/components/submit_button.dart';
 import 'package:flutter_project/presentation/pages/product/product_form_args.dart';
 import 'package:flutter_project/presentation/stores/logged_user_store.dart';
@@ -103,15 +104,10 @@ class _CompanyProductsPage extends State<CompanyProductsPage> {
                     ),
         ),
       ),
-      bottomNavigationBar: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: _isProducer
-            ? SubmitButton(
-                onPressed: _goToCreateProduct,
-                text: 'Criar Produto',
-              )
-            : const SizedBox.shrink(),
-      ),
+      floatingActionButton: _isProducer ? FloatingButton(
+        onPressed: _goToCreateProduct, 
+        icon: Icons.add
+      ) : null,
     );
   }
 }

@@ -62,6 +62,7 @@ class _MenuPagesState extends State<MenuPages> {
             ]
           ),
         floatingActionButton: isBuyer ? FloatingButton(
+          icon: Icons.shopping_cart_outlined,
           onPressed: () {
             Navigator.pushNamed(context, Routes.myCart);
           }

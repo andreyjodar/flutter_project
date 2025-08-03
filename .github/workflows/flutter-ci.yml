@@ -1,0 +1,32 @@
+name: Flutter CI/CD with Firebase
+
+on:
+  push:
+    branches: [ main ]  # você pode mudar para outra branch se quiser
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout código
+        uses: actions/checkout@v3
+
+      - name: Instalar Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.29.2'  # ou a versão do seu projeto
+
+      - name: Instalar dependências
+        run: flutter pub get
+
+      - name: Build APK de release
+        run: flutter build apk --release
+
+      - name: Upload para Firebase App Distribution
+        uses: wzieba/Firebase-Distribution-Github-Action@v1
+        with:
+          appId: ${{ secrets.FIREBASE_APP_ID }}
+          token: ${{ secrets.FIREBASE_TOKEN }}
+          groups: testers  # grupo criado no Firebase App Distribution
+          file: build/app/outputs/flutter-apk/app-release.apk

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_project/presentation/components/floating_button.dart';
 import 'package:flutter_project/presentation/components/submit_button.dart';
 import 'package:flutter_project/domain/entities/company.dart';
 import 'package:flutter_project/domain/entities/user.dart';
@@ -111,16 +112,10 @@ class _ShoppingPageState extends State<ShoppingPage> {
               ),
           )
       ),
-      bottomNavigationBar: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: SizedBox(
-          width: double.infinity,
-          child: _isProducer ? SubmitButton(
-            onPressed: _goToCreateCompany, 
-            text: 'Criar Empresa'
-          ) : SizedBox.shrink(),
-        ),
-      ),
+      floatingActionButton: _isProducer ? FloatingButton(
+        onPressed: _goToCreateCompany, 
+        icon: Icons.add
+      ) : null,
     );
   }
 }

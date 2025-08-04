@@ -2,7 +2,7 @@ name: Flutter CI/CD with Firebase
 
 on:
   push:
-    branches: [ main ]  # você pode mudar para outra branch se quiser
+    branches: [ main ]
 
 jobs:
   build:
@@ -15,7 +15,7 @@ jobs:
       - name: Instalar Flutter
         uses: subosito/flutter-action@v2
         with:
-          flutter-version: '3.29.2'  # ou a versão do seu projeto
+          flutter-version: '3.29.2'
 
       - name: Instalar dependências
         run: flutter pub get
@@ -28,5 +28,5 @@ jobs:
         with:
           appId: ${{ secrets.FIREBASE_APP_ID }}
           token: ${{ secrets.FIREBASE_TOKEN }}
-          groups: testers  # grupo criado no Firebase App Distribution
+          groups: testers 
           file: build/app/outputs/flutter-apk/app-release.apk

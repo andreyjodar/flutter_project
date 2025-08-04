@@ -35,8 +35,8 @@ android {
     implementation platform('com.google.firebase:firebase-bom:33.0.0') // Use a versão mais recente do Firebase BoM
 
     // Adicione as dependências específicas do Firebase que você precisa
-    implementation 'com.google.firebase:firebase-analytics' // Para Analytics
-    implementation 'com.google.firebase:firebase-auth' // Para Autenticação
+    // implementation 'com.google.firebase:firebase-analytics' // Para Analytics
+    // implementation 'com.google.firebase:firebase-auth' // Para Autenticação
     implementation 'com.google.firebase:firebase-firestore' // Para Cloud Firestore
     // ... adicione outras conforme necessário, por exemplo:
     // implementation 'com.google.firebase:firebase-storage'
